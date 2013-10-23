@@ -1,8 +1,8 @@
 
 #include "string" //wtf
 #include <fstream>
-using namespace std;
-class Hron {
+using namespace std;//вообще всё по новому:)))
+class Process_log {
 	string str;
 	int Hr;
 	int Min;
@@ -16,7 +16,7 @@ public:
 	void  setDate (int , int ,int );
 	string  GetString ();
 	void  Backup ();
-	Hron (){
+	Process_log (){
 		str  = '0';
 		Hr = 0;
 		Min = 0;
@@ -28,27 +28,27 @@ public:
 	//наведи на это проект
 };
 
-// void Hron:: setName (string s) {
+// void Process_log:: setName (string s) {
 //	 str = s;
 //}
 
-  void Hron :: setTime (int H, int M, int S){
+  void Process_log :: setTime (int H, int M, int S){
 	  Hr = H;
 	  Min = M;
 	  Sec = S;
   }
 
-  void Hron :: setDate (int Y , int M , int D){
+  void Process_log :: setDate (int Y , int M , int D){
 	  Year = Y;
 	  Day = D;
 	  Month = M;
   }
-  void Hron :: Backup (){
+  void Process_log :: Backup (){
 	  ofstream f("BackUp.txt",ios::in|ios::app);
 	  f<<str<<" "<<Year<<" "<<Month<<" "<<Day<<' '<<Hr<<" "<<Min<<" "<<Sec<<'\n';
   }
 
-  /*string Hron :: GetString () {
+  /*string Process_log :: GetString () {
 	  ifstream f("C://1.txt");
 	  string s1;
 	  while (f>>s1)
