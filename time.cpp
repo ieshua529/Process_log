@@ -1,4 +1,4 @@
-
+﻿
 #include "time.h"
 
 TIME::TIME(){

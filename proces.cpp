@@ -3,8 +3,7 @@
  */
 
 #include "proces.h"
-#include <stdio.h>
-#include <stdlib.h>
+
 
 PROCES::PROCES(){
 	name = new char[5];
