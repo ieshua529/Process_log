@@ -30,7 +30,7 @@ PROCES::~PROCES(){
 }
 
 
-void  GetNameAndMemory (FILE *p_list , PROCES *Obj) {        // парсер
+void  GetNameAndMemory (FILE *p_list , PROCES *Obj) {        // РїР°СЂСЃРµСЂ
 	char s1[100];
 	int counter_quotes=0, length_of_line, j, memory_of_process, k=0;
 	    while (!feof(p_list)){
@@ -67,14 +67,14 @@ void  GetNameAndMemory (FILE *p_list , PROCES *Obj) {        // парсер
 				}
 			}
 			memory_of_process = atoi (mem);
-			Obj[k].memory = memory_of_process;    // тут надо как-то подругому инициализировать
-			Obj[k].name = name_of_process;        // возможно передавать сюда сразу дату и время
-			k++;                                  // и использовать конструктор
+			Obj[k].memory = memory_of_process;    // С‚СѓС‚ РЅР°РґРѕ РєР°Рє-С‚Рѕ РїРѕРґСЂСѓРіРѕРјСѓ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ
+			Obj[k].name = name_of_process;        // РІРѕР·РјРѕР¶РЅРѕ РїРµСЂРµРґР°РІР°С‚СЊ СЃСЋРґР° СЃСЂР°Р·Сѓ РґР°С‚Сѓ Рё РІСЂРµРјСЏ
+			k++;                                  // Рё РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ ..
 		}
 }
 
 
-int NumberOfLines (FILE *p_list) {       //Считает количество строк в файле
+int NumberOfLines (FILE *p_list) {       //РЎС‡РёС‚Р°РµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє РІ С„Р°Р№Р»Рµ
 	int Count = 0;
 	char str[100];
 	while (!feof(p_list)) {
