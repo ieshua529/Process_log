@@ -9,6 +9,8 @@
 #include "time.h"
 #include "date.h"
 
+#include <string.h>
+
 class PROCES {
 private :
 	char *name;// string
@@ -17,6 +19,7 @@ private :
 
 public :
 	PROCES();
+	PROCES(const char *, TIME , C_DATE);
 	// ...
 	~PROCES();
 };

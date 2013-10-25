@@ -18,6 +18,7 @@ public:
 	// @TODO: как именно будем задавать значения.. в SET_TIME'e ??
 
 	TIME();
+	TIME(TIME &);
 
 	// Хз можно ли вызывать friend-function в методе
 	void SET_TIME( );

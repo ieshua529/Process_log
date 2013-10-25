@@ -17,6 +17,7 @@ private:
 
 public:
 	C_DATE();
+	C_DATE(C_DATE &);
 
 	// опять же что с аргументами не ясно пока что
 	void TO_SET();

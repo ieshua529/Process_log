@@ -5,6 +5,8 @@
 
 #include "proces.h"
 
+#include <stdio.h> // for FILE
+
 // #include "openfile.h"
 
 // пути до файлов:

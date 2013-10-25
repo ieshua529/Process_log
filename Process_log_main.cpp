@@ -10,6 +10,10 @@
 /*
  * TASKLIST /FI "USERNAME NE NT AUTORITY\SYSTEM" /FI "STATUS eq running" /FO CSV /NH > process_list
    TASKKILL /IM Process_log.exe
+
+   $ date
+   25 окт 2013 г.  1:17:29
+
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -20,14 +24,9 @@
 
 void GetProcessList() {
 
-	//скрываю окно - хотя с другой стороны нужно придумать как по хитрому потом просматривать результаты
-    HWND hWnd = GetConsoleWindow();
-    ShowWindow(hWnd, SW_HIDE);
-
     // смена кодировки
-	//system("chcp 1251");
+	system("chcp 1251");
 
-   // Пихнул пока в дефайн...потом исправлю
 	system(tasklist);
 
 }
@@ -41,8 +40,8 @@ void Initialization(){
 
 }
 
-void Timer(){
-	// что-то что будет тормозить бесконечный цикл на определённые промежутки
+void Timer(int time){
+	Sleep(time);  // winAPI
 
 }
 
@@ -52,18 +51,27 @@ void CheckProcess(){
 	// но надо будет пару тестиков намутить для всего этого
 }
 
+void HideWindow(){
+	//скрываю окно - хотя с другой стороны нужно придумать как по хитрому потом просматривать результаты
+    HWND hWnd = GetConsoleWindow();
+    ShowWindow(hWnd, SW_HIDE);
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int main() {
+int main(int argc, char *argv[]) {
+
+	int time = 3*1000; // 3sec
+	//time = atoi(argv[1]);
 
 	Initialization();
 
 	while(1){
 		// будем работать в бесконечном цикле
 
-		Timer();
+		Timer(time);
 		CheckProcess();
 
 		// ...
