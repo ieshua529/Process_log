@@ -10,7 +10,7 @@ C_DATE::C_DATE() {
 
 }
 
-C_DATE::C_DATE(C_DATE & D){
+C_DATE::C_DATE(C_DATE & D){   
 	year = D.year;
 	day = D.day;
 	month = D.month;
