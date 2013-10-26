@@ -15,11 +15,14 @@
 #include <windows.h>
 #include "all_process.h"
 #include <iostream>
+#include <io.h>
+#include <time.h>
+#include <unistd.h>
 
 using namespace std;
 
 const char * tasklist = "TASKLIST /FI \"USERNAME NE NT AUTORITY\SYSTEM\" /FI \"STATUS eq running\" /FO CSV /NH > 1.txt";
-
+const char * exist = "exist";
 
 string GET_OS_NAME() {
 	#if (defined __linux__)
@@ -32,7 +35,12 @@ string GET_OS_NAME() {
 }
 
 
-
+void HideWindow(void);
+void GetProcessList();
+void Initialization(bool);
+void Timer(int);
+void CheckProcess();
+bool FileExists(const char *);
 
 
 #endif

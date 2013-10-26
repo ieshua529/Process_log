@@ -22,27 +22,54 @@
 #include "Process_log_main.h"
 
 
-void GetProcessList() {
+void GetProcessList(const char* OS) {
 
+	if(strcmp(OS,"WINDOWS")){
     // смена кодировки
 	system("chcp 1251");
-
 	system(tasklist);
+	}else if(strcmp(OS,"LINUX")){
+		// ...
+	}
 
 }
 
 
-void Initialization(){
-	// точно знаю что нужно первым делом проверить на существование другой версии
+void Initialization(bool is_exist){
+
 	// первый раз пооткрываать файлы
 	// вызвать GetProcessList
 	//
+	if(is_exist && FileExists("exist")) {
+		remove(exist); // если включили с параметров '-e' то удаляем файл
+	}
+
+	// по теории если файл запускается без параметра или уже существует то выход
+	if (FileExists("exist") || !is_exist){
+		exit(0);
+	}else{
+		FILE *f;
+		if ((f = fopen(exist, "w")) == NULL){
+			exit(0);
+		}
+		fclose(f);
+	}
+
+	HideWindow();
+	if(GET_OS_NAME() == "WINDOWS"){
+		GetProcessList("WINDOWS");
+	}else{
+		GetProcessList("LINUX");
+	}
 
 }
 
 void Timer(int time){
-	Sleep(time);  // winAPI
-
+	if(GET_OS_NAME() == "WINDOWS"){
+		Sleep(time);  // winAPI
+	}else{
+		usleep(time);
+	}
 }
 
 void CheckProcess(){
@@ -53,23 +80,37 @@ void CheckProcess(){
 
 void HideWindow(){
 	//скрываю окно - хотя с другой стороны нужно придумать как по хитрому потом просматривать результаты
-    HWND hWnd = GetConsoleWindow(); // так не делать скрытым, а сворачивать в трее
-    ShowWindow(hWnd, SW_HIDE);
+    HWND hWnd = GetConsoleWindow(); // ты не прав - окна нет вообще... не в трее, не в  панели задач - только диспетчер
+    ShowWindow(hWnd, SW_HIDE); // да может оно на секунду появляется, но тут никак
 }
 
+// проверка на наличие оригинального процесса, если существует - exit()
+
+
+bool FileExists(const char *fname){
+
+	return access(fname, 0) != -1;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int main(int argc, char *argv[]) {
 
+	// @TODO: добавить большей свободы в передаче параметров в main()
+
 	int time = 3*1000; // 3sec
 	//time = atoi(argv[1]);
 
-	Initialization();
+
+	// в автозагрузку будет передаваться параметр '-e' -> следовательно файл включился первый раз при загрузке ОС
+	//bool is_exist = (strcmp(argv[2], "-e")) ? true : false;
+	bool is_exist = true;
+
+	Initialization(is_exist);
 
 	while(1){
-		// будем работать в бесконечном цикле
+
 
 		Timer(time);
 		CheckProcess();
@@ -77,6 +118,7 @@ int main(int argc, char *argv[]) {
 		// ...
 	}
 
+	remove(exist); // хз сработает ли когда выключение компьютера
 	return 0;
 }
 
