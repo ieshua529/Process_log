@@ -1,11 +1,3 @@
-//============================================================================
-/*
-@TODO:
-
-
-*/
-//============================================================================
-
 // некоторые команды
 /*
  * TASKLIST /FI "USERNAME NE NT AUTORITY\SYSTEM" /FI "STATUS eq running" /FO CSV /NH > process_list
@@ -24,22 +16,24 @@
 
 void GetProcessList(const char* OS) {
 
-	if(strcmp(OS,"WINDOWS")){
-    // смена кодировки
-	system("chcp 1251");
-	system(tasklist);
-	}else if(strcmp(OS,"LINUX")){
+	if(GET_OS_NAME() == "WINDOWS"){
+
+		system("chcp 1251");
+		system(tasklist);
+
+	} else if(GET_OS_NAME() == "LINUX"){
 		// ...
 	}
 
 }
 
 
-void Initialization(bool is_exist){
+void Initialization(const bool is_exist){
+
+	setlocale(0,"");
 
 	// первый раз пооткрываать файлы
-	// вызвать GetProcessList
-	//
+
 	if(is_exist && FileExists("exist")) {
 		remove(exist); // если включили с параметров '-e' то удаляем файл
 	}
@@ -64,7 +58,7 @@ void Initialization(bool is_exist){
 
 }
 
-void Timer(int time){
+void Timer(const int time){
 	if(GET_OS_NAME() == "WINDOWS"){
 		Sleep(time);  // winAPI
 	}else{
@@ -78,13 +72,15 @@ void CheckProcess(){
 	// но надо будет пару тестиков намутить для всего этого
 }
 
-void HideWindow(){
-	//скрываю окно - хотя с другой стороны нужно придумать как по хитрому потом просматривать результаты
-    HWND hWnd = GetConsoleWindow(); // ты не прав - окна нет вообще... не в трее, не в  панели задач - только диспетчер
-    ShowWindow(hWnd, SW_HIDE); // да может оно на секунду появляется, но тут никак
-}
+void HideWindow(void){
 
-// проверка на наличие оригинального процесса, если существует - exit()
+	if(GET_OS_NAME() == "WINDOWS"){
+		HWND hWnd = GetConsoleWindow();
+		ShowWindow(hWnd, SW_HIDE);
+	}else {
+		// ...
+	}
+}
 
 
 bool FileExists(const char *fname){

@@ -18,6 +18,8 @@
 #include <io.h>
 #include <time.h>
 #include <unistd.h>
+#include <locale.h>
+
 
 using namespace std;
 
@@ -37,8 +39,8 @@ string GET_OS_NAME() {
 
 void HideWindow(void);
 void GetProcessList();
-void Initialization(bool);
-void Timer(int);
+void Initialization(const bool);
+void Timer(const int);
 void CheckProcess();
 bool FileExists(const char *);
 
