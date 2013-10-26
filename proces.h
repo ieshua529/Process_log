@@ -11,14 +11,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include <time.h>
 class PROCES {
 private :
 	char *name;// string  думаю лучше стринг сделать
-	TIME time;    
-	C_DATE date;    
+	//TIME time;    
+	//C_DATE date;    
 	int memory;
-
+	tm * TimeAndDate;
 public :
 	PROCES();
 	PROCES(const char *, TIME , C_DATE);

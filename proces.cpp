@@ -10,7 +10,7 @@ PROCES::PROCES(){
 	strcpy(name, "none\0");
 	C_DATE date;  
 	TIME time;
-
+	
 }
 
 PROCES::PROCES(const char *n, TIME t,  C_DATE d){
@@ -32,6 +32,9 @@ PROCES::~PROCES(){
 void  GetNameAndMemory (FILE *p_list , PROCES *Obj) {        // парсер
 	char s1[100];
 	int counter_quotes=0, length_of_line, j, memory_of_process, k=0;
+	time_t t = time(NULL);						// или закинуть в функциюю считывания тасклиста в файл
+	tm *currentTime = localtime(&t);            // пусть там сразу определяет время и сюда передавать через параметры
+												// разница по времени будет не значитела
 	    while (!feof(p_list)){
 			fgets(s1,100,p_list);
 			length_of_line=strlen(s1);
@@ -66,10 +69,13 @@ void  GetNameAndMemory (FILE *p_list , PROCES *Obj) {        // парсер
 				}
 			}
 			memory_of_process = atoi (mem);
-			Obj[k].memory = memory_of_process;    // тут надо как-то подругому инициализировать
-			Obj[k].name = name_of_process;        // возможно передавать сюда сразу дату и время
-			k++;                                  // и использовать конструктор ..
+			Obj[k].memory = memory_of_process;    
+			Obj[k].name = name_of_process;
+			Obj[k].TimeAndDate = currentTime;     // так будет лучше всего хранить, не надо 2  класса сразу
+		     								      // да и много чего другого
+			k++;                                  
 		}
+		rewind(p_list);
 }
 
 
