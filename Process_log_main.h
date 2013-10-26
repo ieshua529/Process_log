@@ -12,8 +12,9 @@
 #ifndef PROCESS_LOG_MAIN_H
 #define PROCESS_LOG_MAIN_H
 
-#include <windows.h>
 #include "all_process.h"
+
+#include <windows.h>
 #include <iostream>
 #include <io.h>
 #include <time.h>
@@ -23,7 +24,7 @@
 
 using namespace std;
 
-const char * tasklist = "TASKLIST /FI \"USERNAME NE NT AUTORITY\SYSTEM\" /FI \"STATUS eq running\" /FO CSV /NH > 1.txt";
+const char * tasklist = "TASKLIST /FI \"USERNAME NE NT AUTORITY\SYSTEM\" /FI \"STATUS eq running\" /FO CSV /NH > process_list";
 const char * exist = "exist";
 
 string GET_OS_NAME() {
@@ -35,6 +36,14 @@ string GET_OS_NAME() {
 	#endif
 	#endif
 }
+
+#ifndef _FILE_TO_LOG
+#define _FILE_TO_LOG "log"
+#endif
+#ifndef _FILE_ALL_PROCESS
+#define _FILE_ALL_PROCESS "process_list"
+#endif
+
 
 
 void HideWindow(void);

@@ -6,47 +6,47 @@
 #include "proces.h"
 
 #include <stdio.h> // for FILE
+#include <time.h>
+
 
 // #include "openfile.h"
 
 // пути до файлов:
 // 1. без расширения - оно нам и не надо
 // 2. пока работаем в текущей директории
+#ifndef _FILE_TO_LOG
 #define _FILE_TO_LOG "log"
+#endif
+#ifndef _FILE_ALL_PROCESS
 #define _FILE_ALL_PROCESS "process_list"
-
+#endif
 
 class ALL_PROCESS {
 private:
-	 // делаем динамически так как размер меняется и неопределён
+
 	PROCES *all_process;
-
-	// файл для записи туда log ... открываем в режиме - "a"
-	FILE *log;
-
-	//файл для считывания и распарсивания его
 	FILE *p_list;
 
+	//FILE *log;
 	// текущее время
-	TIME currentTime;
+
+//	TIME currentTime;
 
 
 public:
-	// аргументы по ходу дела определим
 
 	ALL_PROCESS();
+	PROCES * Value_All_Process();
+	FILE * Value_P_List();
 
-	// собственно заготовка парсера
-	// более чем уверен что выйдет ф-ции 3 но вне класса...
 	// так как работа с файлом организуется через френд-функ openfile()
-	void Parser();
-
-	bool WriteToLog();
-
-	// void InitProcessList () - что-то типа конструктора... посмотрим как будет проще
+	friend void GetNameAndMemory (FILE *F , PROCES *Obj);
 
 	~ALL_PROCESS();
 
 };
+
+int  NumberOfLines 	 (FILE *F);
+void WriteToLog(const char *);
 
 #endif

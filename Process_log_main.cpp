@@ -34,12 +34,12 @@ void Initialization(const bool is_exist){
 
 	// первый раз пооткрываать файлы
 
-	if(is_exist && FileExists("exist")) {
+	if(is_exist && FileExists(exist)) {
 		remove(exist); // если включили с параметров '-e' то удаляем файл
 	}
 
 	// по теории если файл запускается без параметра или уже существует то выход
-	if (FileExists("exist") || !is_exist){
+	if (FileExists(exist) || !is_exist){
 		exit(0);
 	}else{
 		FILE *f;
@@ -56,6 +56,8 @@ void Initialization(const bool is_exist){
 		GetProcessList("LINUX");
 	}
 
+	ALL_PROCESS 	main_obj; // как не пёрло мне придумывать нормальное название >___<
+
 }
 
 void Timer(const int time){
@@ -66,11 +68,6 @@ void Timer(const int time){
 	}
 }
 
-void CheckProcess(){
-	// пошло поехала работа с классами и т.д.
-	// Отсюда тоже пару доп ф-ций получится -> собственно основная и самая напряжная ф-ция...под конец её
-	// но надо будет пару тестиков намутить для всего этого
-}
 
 void HideWindow(void){
 
@@ -87,6 +84,35 @@ bool FileExists(const char *fname){
 
 	return access(fname, 0) != -1;
 }
+
+void CheckProcess(){
+	/*
+	 * 0. GetProcessList
+	 * 1. вызываем фрэнд NumberOfLines
+	 * 2. Создаём временный массив объектов *temp
+	 * 3. Вызываем парсер
+	 * 4. Получили массив объектов который надо сравнить с главным
+	 * 5. если в темп отсутствует что-то - то в носим в ещё один массив ? для записи в лог
+	 * 6. другой цикл - если прибавилось то вносим в существующий ?
+	 * 7. деструктор  *темп
+	 */
+
+	if(GET_OS_NAME() == "WINDOWS"){
+		GetProcessList("WINDOWS");
+	}else{
+		GetProcessList("LINUX");
+	}
+
+	ALL_PROCESS  temp;
+
+	GetNameAndMemory(temp.Value_P_List() , temp.Value_All_Process());
+
+
+
+	temp.~ALL_PROCESS();
+}
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
