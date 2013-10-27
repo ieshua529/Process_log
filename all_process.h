@@ -4,7 +4,7 @@
 #define ALL_PROCESS_H
 
 #include "proces.h"
-
+#include <vector>
 #include <stdio.h> // for FILE
 #include <time.h>
 
@@ -40,13 +40,12 @@ public:
 	FILE * Value_P_List();
 
 	// так как работа с файлом организуется через френд-функ openfile()
-	friend void GetNameAndMemory (FILE *F , PROCES *Obj);
+	friend void GetNameAndMemory (FILE *F , vector<PROCES> V);
 
 	~ALL_PROCESS();
 
 };
 
-int  NumberOfLines 	 (FILE *F);
 void WriteToLog(const char *);
 
 #endif

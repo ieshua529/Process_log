@@ -15,26 +15,27 @@ ALL_PROCESS::ALL_PROCESS() {
 	if ( (p_list = fopen(_FILE_ALL_PROCESS, "r") ) ==  NULL){
 		WriteToLog("error: File process_list couldn't be create");
 	}else {
-		int num_of_obj = NumberOfLines(p_list);
-		all_process = new PROCES [ num_of_obj ];
+		//int num_of_obj = NumberOfLines(p_list);     // эт не надо уже
+		vector<PROCES> all_proces;
 	}
 
 
 }
 
 
-void  GetNameAndMemory (FILE *p_list , PROCES *Obj) {
+void  GetNameAndMemory (FILE *p_list , vector<PROCES> V) {
 	char s1[100];
-	int counter_quotes=0, length_of_line, j, memory_of_process, k=0;
-	time_t t = time(NULL);						// или закинуть в функциюю считывания тасклиста в файл
-	tm *currentTime = localtime(&t);            // пусть там сразу определяет время и сюда передавать через параметры
-												// разница по времени будет не значитела
+	int counter_quotes=0, length_of_line, j, memory_of_process, k=0, Pid;
+	time_t t = time(NULL);						
+	tm *currentTime = localtime(&t);            
+	PROCES Obj;											
 	    while (!feof(p_list)){
 			fgets(s1,100,p_list);
 			length_of_line=strlen(s1);
 			counter_quotes=0;
 			char name_of_process[20]="\0";
 			char mem[10]="\0";
+			char pid[10] = "\0";
 			for (int i = 0;i < length_of_line; i++) {
 				if (s1[i] == '"') {
 					counter_quotes++;
@@ -44,6 +45,15 @@ void  GetNameAndMemory (FILE *p_list , PROCES *Obj) {
 						while (s1[i]!= '"') {
 							name_of_process[j]=s1[i];
 							j++;
+							i++;
+						}
+						counter_quotes++;
+					}
+				if (counter_quotes == 3) {
+						j=0;
+						while (s1[i]!= '"') {
+							pid[j]=s1[i];
+							j++;	
 							i++;
 						}
 						counter_quotes++;
@@ -63,27 +73,21 @@ void  GetNameAndMemory (FILE *p_list , PROCES *Obj) {
 				}
 			}
 			memory_of_process = atoi (mem);
-			Obj[k].memory = memory_of_process;
-			Obj[k].name = name_of_process;
-			Obj[k].TimeAndDate = currentTime ;     // так будет лучше всего хранить, не надо 2  класса сразу
-		     								      // да и много чего другого
+			Pid = atoi(pid);
+			Obj.memory = memory_of_process;
+			Obj.name = name_of_process;
+			Obj.TimeAndDate = currentTime ; 
+			Obj.PID = Pid;
+			V.push_back(Obj);								      
 			k++;
 		}
 		rewind(p_list);
 }
 
-
-int NumberOfLines (FILE *p_list) {       //Считает количество строк в файле
-	int count = 0;
-	char str[100];
-	while (!feof(p_list)) {
-		fgets(str, 100, p_list);
-		count++;
-	}
-	rewind(p_list);
-	return count;
-}
-
+//for (vector<str11>::iterator i = B.begin(); i != B.end();i++){
+//		A = *i;
+//		cout<<A.name<<" "<<A.Memory<<" "<<A.TimeAndDate->tm_year<<endl; 
+//	}
 
 
 void WriteToLog(const char * to_log) {

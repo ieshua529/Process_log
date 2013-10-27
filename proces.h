@@ -17,12 +17,12 @@
 using namespace std;
 
 class PROCES {
-private :
-	string name;
-	int memory;
+public :         // с приватом надо сеттеры геттеры делать
+	string name; // а так не прикольно >_<
+	int memory;  // ну или переносить сюда GetNameAndMemory()
 	tm * TimeAndDate;
+	int PID;
 
-public :
 	PROCES();
 	// ...
 	~PROCES();
