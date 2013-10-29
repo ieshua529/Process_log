@@ -32,8 +32,15 @@ public :
 	void SetProcesMemory(int);
 	void SetProcesPID(int );
 	void SetProcesName(string );
-	void SetProcesTimeAndDate(const tm *);
+	void SetProcesTimeAndDate(tm *);
 	void SetTime_t(time_t);
+
+	const char * ShowProcesName();
+	char * ShowProcesDate();
+	char * ShowProcesTime();
+	int ShowProcesMemory();
+	int ShowProcesPID();
+
 
 
 friend void GetNameAndMemory (FILE * , PROCES *);

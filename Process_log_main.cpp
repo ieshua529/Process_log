@@ -14,7 +14,7 @@
 #include "Process_log_main.h"
 
 
-void GetProcessList(const char* OS) {
+void GetProcessList() {
 
 	if(GET_OS_NAME() == "WINDOWS"){
 
@@ -50,16 +50,56 @@ ALL_PROCESS Initialization(const bool is_exist){
 	}
 
 	HideWindow();
-	if(GET_OS_NAME() == "WINDOWS"){
-		GetProcessList("WINDOWS");
-	}else{
-		GetProcessList("LINUX");
-	}
 
+	GetProcessList();
+
+	// @TODO: не срабатывает конструктор как надо!!!
 	ALL_PROCESS 	main_obj;
 
 //	GetNameAndMemory( main_obj.Value_P_List()  , main_obj.Value_All_Process());
 	GetNameAndMemory( main_obj.Value_P_List()  , main_obj.GetVectorAllProces());
+
+	FILE *f;
+	//@TODO: а куда вообще и что мы сохраняем...если это лог, то почему при открытие я пишу в него же>___<
+	if(( f = fopen(_FILE_TO_LOG , "a")) == NULL){
+		WriteToLog("Can't create _FILE_TO_LOG");
+	}else{
+
+/*
+	При инициализации записываю в лог-файл первичное состояние процессов...
+	а в CheckProcess()  идут их изменения
+	новая сессия начинается со стоки из ###
+	если процесс добавился его запись начинается с  => 			 + :
+	исчез  =>			 - :
+
+	пример:
+
+		+ : explorer.exe : 1584 : 12345 : 01.02.2013 : 12-30
+
+		[операция] : [name] : [PID] : [memory] : [date] : [time]
+
+ */
+
+		//@TODO: оформить в виде отдельной ф-ции
+		fputs("\n###\n" , f);
+		vector<PROCES>::iterator i;
+		for(i = main_obj.GetVectorAllProces().begin(); i != main_obj.GetVectorAllProces().end(); i++){
+			//fprintf(f, "+ : ");
+			fprintf(f," + : %s : %d : %d : %s : %s\n" ,
+					main_obj.GetVectorAllProces().back().ShowProcesName(),
+					main_obj.GetVectorAllProces().back().ShowProcesPID(),
+					main_obj.GetVectorAllProces().back().ShowProcesMemory(),
+					main_obj.GetVectorAllProces().back().ShowProcesDate(),
+					main_obj.GetVectorAllProces().back().ShowProcesTime() );
+		}
+		main_obj.GetVectorAllProces().pop_back();
+
+		fclose(f);
+
+
+	}
+
+
 
 	return main_obj;
 }
@@ -101,11 +141,8 @@ void CheckProcess(ALL_PROCESS  main_obj){
 	 * 7. деструктор  *темп
 	 */
 
-	if(GET_OS_NAME() == "WINDOWS"){
-		GetProcessList("WINDOWS");
-	}else{
-		GetProcessList("LINUX");
-	}
+	GetProcessList();
+
 
 	ALL_PROCESS  temp;
 

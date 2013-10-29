@@ -18,20 +18,23 @@ ALL_PROCESS::ALL_PROCESS() {
 	}else {
 		//int num_of_obj = NumberOfLines(p_list);
 		//all_process = new PROCES [ num_of_obj ];
-		vector <PROCES> all_proces;
+
+		//@TODO: баг тута..не знаю.. но у меня как не смотрю не вызывается здесь конструктор для эл-та PROCES
+		 all_process.reserve(20);
+
 	}
 }
 
 ALL_PROCESS::ALL_PROCESS(int size){
-	PROCES temp;
-	all_process.resize(size, temp );
+
+	all_process.reserve( size );
 	if ((p_list = fopen(_FILE_ALL_PROCESS, "r") ) ==  NULL){
 		WriteToLog("error: File process_list couldn't be open");
 	}
 }
 
-
-void  GetNameAndMemory (FILE *p_list , vector<PROCES> V) {
+//@TODO: сюда надо передать по ссылке..!!!
+void  GetNameAndMemory (FILE *p_list , vector<PROCES>  V) {
 	char s1[100];
 	int counter_quotes=0, length_of_line, j, memory_of_process, k=0, Pid;
 	time_t t = time(NULL);
@@ -83,8 +86,8 @@ void  GetNameAndMemory (FILE *p_list , vector<PROCES> V) {
 			}
 			memory_of_process = atoi (mem);
 			Pid = atoi(pid);
-			Obj.SetProcesMemory(memory_of_process ); // похоже что тут всё равно косяк был...глянь чуть ниже как ты получил доступ
-			Obj.SetProcesName ( name_of_process) ; // к закрытым элементам 0_о
+			Obj.SetProcesMemory(memory_of_process );
+			Obj.SetProcesName ( name_of_process) ;
 			Obj.SetProcesTimeAndDate(currentTime ) ;
 			Obj.SetProcesPID ( Pid );
 			Obj.SetTime_t(t);
@@ -93,7 +96,7 @@ void  GetNameAndMemory (FILE *p_list , vector<PROCES> V) {
 
 			k++;
 		}
-		rewind(p_list);
+	//	rewind(p_list);  // а зачем нам это?
 }
 
 //vector<PROCES> Compare (vector<PROCES> &V1, vector<PROCES> &V2){
@@ -261,14 +264,12 @@ void WriteChangesToLOG( ALL_PROCESS & main , const  ALL_PROCESS & temp){
 	int size_main = sizeof(main)/sizeof(ALL_PROCESS);
 	int size_temp = sizeof(temp)/sizeof(ALL_PROCESS);
 
-	if(size_main >= size_temp){
-		ALL_PROCESS TEMP_MAIN(size_main);
-	}else {
-		ALL_PROCESS TEMP_MAIN(size_temp);
-	}
+// @TODO: сравнить 2 вектора и записать в файл изменения
 
 }
-vector <PROCES> ALL_PROCESS::GetVectorAllProces(){
+
+vector <PROCES>  ALL_PROCESS::GetVectorAllProces(){
+	printf("%d",all_process.size());
 	return 	all_process;
 }
 
