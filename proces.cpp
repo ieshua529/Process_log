@@ -9,7 +9,6 @@ PROCES::PROCES(){
 	TimeAndDate = NULL;
 	memory = 0;
 	PID = 0;
-
 	//	TimeAndDate->tm_hour = TimeAndDate->tm_min = TimeAndDate->tm_sec  =
 	//		TimeAndDate->tm_mday  = TimeAndDate->tm_mon = TimeAndDate->tm_year = 0;
 }
@@ -28,6 +27,10 @@ void PROCES::SetProcesName(string newName){
 	}else{
 		// write to log error
 	}
+}
+
+void PROCES::SetTime_t (time_t t1){
+		t = t1;
 }
 
 void PROCES::SetProcesTimeAndDate(const tm * temp){

@@ -23,6 +23,7 @@ private :
 	int memory;
 	tm * TimeAndDate;
 	int PID;
+	time_t t;
 
 public :
 	PROCES();
@@ -32,6 +33,7 @@ public :
 	void SetProcesPID(int );
 	void SetProcesName(string );
 	void SetProcesTimeAndDate(const tm *);
+	void SetTime_t(time_t);
 
 
 friend void GetNameAndMemory (FILE * , PROCES *);
