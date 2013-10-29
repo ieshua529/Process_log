@@ -23,13 +23,8 @@
 class ALL_PROCESS {
 private:
 
-	PROCES *all_process; // что то не складывается... так то это вектор...>___<
+	vector <PROCES> all_process;
 	FILE *p_list;
-
-	//FILE *log;
-	// текущее время
-
-//	TIME currentTime;
 
 
 public:
@@ -39,9 +34,12 @@ public:
 	PROCES * Value_All_Process();
 	FILE * Value_P_List();
 
-	friend void GetNameAndMemory (FILE *F , vector<PROCES>);
+	friend void GetNameAndMemory (FILE *F , vector <PROCES> );
+	//friend void GetNameAndMemory (FILE *F , PROCES *);// странно но у меня не перегружается фрэнд функции
 
 	~ALL_PROCESS();
+
+	vector <PROCES>  GetVectorAllProces();
 
 	void operator == (const ALL_PROCESS &);
 

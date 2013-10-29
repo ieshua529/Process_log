@@ -13,6 +13,7 @@
 #include <string>
 #include <stdlib.h>
 #include <time.h>
+#include <vector>
 
 using namespace std;
 
@@ -27,7 +28,14 @@ public :
 	PROCES();
 	// ...
 	~PROCES();
-friend void GetNameAndMemory (FILE *F , PROCES *Obj);
+	void SetProcesMemory(int);
+	void SetProcesPID(int );
+	void SetProcesName(string );
+	void SetProcesTimeAndDate(const tm *);
+
+
+friend void GetNameAndMemory (FILE * , PROCES *);
+friend void  GetNameAndMemory (FILE * , vector<PROCES>);
 //	friend int  NumberOfLines 	 (FILE *F);
 
 };

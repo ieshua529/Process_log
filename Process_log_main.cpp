@@ -56,8 +56,10 @@ ALL_PROCESS Initialization(const bool is_exist){
 		GetProcessList("LINUX");
 	}
 
-	ALL_PROCESS 	main_obj; // как не пёрло мне придумывать нормальное название >___<
-	GetNameAndMemory( main_obj.Value_P_List()  , main_obj.Value_All_Process());
+	ALL_PROCESS 	main_obj;
+
+//	GetNameAndMemory( main_obj.Value_P_List()  , main_obj.Value_All_Process());
+	GetNameAndMemory( main_obj.Value_P_List()  , main_obj.GetVectorAllProces());
 
 	return main_obj;
 }
@@ -107,7 +109,7 @@ void CheckProcess(ALL_PROCESS  main_obj){
 
 	ALL_PROCESS  temp;
 
-	GetNameAndMemory(temp.Value_P_List() , temp.Value_All_Process());
+	GetNameAndMemory(temp.Value_P_List() , temp.GetVectorAllProces());
 
 	WriteChangesToLOG( main_obj , temp );
 
