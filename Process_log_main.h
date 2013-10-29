@@ -48,9 +48,9 @@ string GET_OS_NAME() {
 
 void HideWindow(void);
 void GetProcessList();
-void Initialization(const bool);
+ALL_PROCESS Initialization(const bool);
 void Timer(const int);
-void CheckProcess();
+void CheckProcess(ALL_PROCESS );
 bool FileExists(const char *);
 
 

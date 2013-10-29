@@ -28,7 +28,7 @@ void GetProcessList(const char* OS) {
 }
 
 
-void Initialization(const bool is_exist){
+ALL_PROCESS Initialization(const bool is_exist){
 
 	setlocale(0,"");
 
@@ -57,7 +57,9 @@ void Initialization(const bool is_exist){
 	}
 
 	ALL_PROCESS 	main_obj; // как не пёрло мне придумывать нормальное название >___<
+	GetNameAndMemory( main_obj.Value_P_List()  , main_obj.Value_All_Process());
 
+	return main_obj;
 }
 
 void Timer(const int time){
@@ -85,7 +87,7 @@ bool FileExists(const char *fname){
 	return access(fname, 0) != -1;
 }
 
-void CheckProcess(){
+void CheckProcess(ALL_PROCESS  main_obj){
 	/*
 	 * 0. GetProcessList
 	 * 1. вызываем фрэнд NumberOfLines
@@ -107,6 +109,7 @@ void CheckProcess(){
 
 	GetNameAndMemory(temp.Value_P_List() , temp.Value_All_Process());
 
+	WriteChangesToLOG( main_obj , temp );
 
 
 	temp.~ALL_PROCESS();
@@ -129,13 +132,13 @@ int main(int argc, char *argv[]) {
 	//bool is_exist = (strcmp(argv[2], "-e")) ? true : false;
 	bool is_exist = true;
 
-	Initialization(is_exist);
+	ALL_PROCESS main_obj = Initialization(is_exist);
 
 	while(1){
 
 
 		Timer(time);
-		CheckProcess();
+		CheckProcess(main_obj);
 
 		// ...
 	}
@@ -143,6 +146,8 @@ int main(int argc, char *argv[]) {
 	remove(exist); // хз сработает ли когда выключение компьютера
 	return 0;
 }
+
+
 
 
 

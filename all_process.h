@@ -9,7 +9,6 @@
 #include <time.h>
 
 
-// #include "openfile.h"
 
 // пути до файлов:
 // 1. без расширения - оно нам и не надо
@@ -24,7 +23,7 @@
 class ALL_PROCESS {
 private:
 
-	PROCES *all_process;
+	PROCES *all_process; // что то не складывается... так то это вектор...>___<
 	FILE *p_list;
 
 	//FILE *log;
@@ -36,16 +35,21 @@ private:
 public:
 
 	ALL_PROCESS();
+	ALL_PROCESS(int);
 	PROCES * Value_All_Process();
 	FILE * Value_P_List();
 
-	// так как работа с файлом организуется через френд-функ openfile()
-	friend void GetNameAndMemory (FILE *F , vector<PROCES> V);
+	friend void GetNameAndMemory (FILE *F , vector<PROCES>);
 
 	~ALL_PROCESS();
 
+	void operator == (const ALL_PROCESS &);
+
+	friend void WriteChangesToLOG( ALL_PROCESS &,const  ALL_PROCESS &);
+
 };
 
+int  NumberOfLines 	 (FILE *F);
 void WriteToLog(const char *);
 
 #endif
