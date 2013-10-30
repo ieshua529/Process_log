@@ -67,6 +67,10 @@ char * PROCES::ShowProcesDate(){
 	return 	temp;
 }
 
+time_t PROCES::ShowTime_t (){
+		return t;
+}
+
 PROCES::~PROCES(){
 	delete [] TimeAndDate;
 }

@@ -40,11 +40,12 @@ public :
 	char * ShowProcesTime();
 	int ShowProcesMemory();
 	int ShowProcesPID();
+	time_t ShowTime_t ();
 
 
 
-friend void GetNameAndMemory (FILE * , PROCES *);
-friend void  GetNameAndMemory (FILE * , vector<PROCES>);
+friend void  GetNameAndMemory (FILE *p_list , vector<PROCES>  &V);
+friend string Conversation (time_t t_finish, time_t t_begin);
 //	friend int  NumberOfLines 	 (FILE *F);
 
 };

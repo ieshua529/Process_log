@@ -34,7 +34,7 @@ ALL_PROCESS::ALL_PROCESS(int size){
 }
 
 //@TODO: сюда надо передать по ссылке..!!!
-void  GetNameAndMemory (FILE *p_list , vector<PROCES>  V) {
+void  GetNameAndMemory (FILE *p_list , vector<PROCES>  &V) {
 	char s1[100];
 	int counter_quotes=0, length_of_line, j, memory_of_process, k=0, Pid;
 	time_t t = time(NULL);
@@ -96,44 +96,45 @@ void  GetNameAndMemory (FILE *p_list , vector<PROCES>  V) {
 
 			k++;
 		}
-	//	rewind(p_list);  // а зачем нам это?
+	//	rewind(p_list);  // а зачем нам это? для возвращения указателя на начало файла
 }
 
-//vector<PROCES> Compare (vector<PROCES> &V1, vector<PROCES> &V2){
-//	PROCES O1 , O2;
-//	int Count = 0;
-//	vector<PROCES>::iterator i,j;
-//	vector<PROCES> V;
-//	for (i = V1.begin(); i != V1.end(); i++) {
-//		for (j = V2.begin(); j != V2.end(); j++){
-//			O1 = *i;
-//			O2 = *j;
-//			if (O1.name == O2.name && O1.PID == O2.PID){
-//				V.push_back(O1);
-//				Count++;
-//			}
-//
-//		}
-//		if (Count == 0)
-//			cout<<O1.name<<" просуществовал "<<difftime(O2.t,O1.t)<<" секунд"<<endl;
-//		Count=0;
-//	}
-//
-//	for (i = V2.begin(); i != V2.end(); i++) {
-//		for (j = V1.begin(); j != V1.end(); j++){
-//			O1 = *i;
-//			O2 = *j;
-//			if (O1.name == O2.name && O1.PID == O2.PID){
-//				Count++;
-//			}
-//		}
-//		if (Count == 0)
-//			V.push_back(O1);
-//		Count = 0;
-//	}
-//
-//	return V;
-//}
+vector<PROCES> Compare (vector<PROCES> &V1, vector<PROCES> &V2){ // v1 главный вектор v2 только считанный
+	PROCES O1 , O2;
+	int Count = 0;
+	vector<PROCES>::iterator i,j;
+	vector<PROCES> V;
+	time_t t = time(NULL);
+	for (i = V1.begin(); i != V1.end(); i++) {
+		for (j = V2.begin(); j != V2.end(); j++){
+			O1 = *i;
+			O2 = *j;
+			if (O1.ShowProcesName() == O2.ShowProcesName() && O1.ShowProcesPID() == O2.ShowProcesPID()){
+				V.push_back(O1);
+				Count++;
+			}
+
+		}
+		if (Count == 0)
+			cout<<O1.ShowProcesName()<<" просуществовал "<<Conversation(t,O1.ShowTime_t())<<endl;
+		Count=0;
+	}
+
+	for (i = V2.begin(); i != V2.end(); i++) {
+		for (j = V1.begin(); j != V1.end(); j++){
+			O1 = *i;
+			O2 = *j;
+			if (O1.ShowProcesName() == O2.ShowProcesName() && O1.ShowProcesPID() == O2.ShowProcesPID()){
+				Count++;
+			}
+		}
+		if (Count == 0)
+			V.push_back(O1);
+		Count = 0;
+	}
+
+	return V;
+}
 
 // оставлю эту ф-цию... на всякий вдруг что-то не сработает ... всё равно она перегружена
 
@@ -163,54 +164,38 @@ void  GetNameAndMemory (FILE *p_list , vector<PROCES>  V) {
 //	getch();
 //}
 
+string Conversation (time_t t_finish, time_t t_begin){
+	int T = difftime(t_finish,t_begin);
+	int sec, min, days, hours;
+	char str[40];
+	sec = T%60;
+	T =T/60;
+	if (T!=0){
+		min= T%60;
+		T/=60;
+		if (T != 0){
+			hours = T%24;
+			T/=24;
+			if (T != 0){
+				days = T;
+				sprintf( str,"days: %d hours: %d min: %d sec: %d",days,hours,min,sec );
+				return str;
+			}
+			else {
+				sprintf( str,"hours: %d min: %d sec: %d",hours,min,sec );
+				return str;
+			}
 
-void GetNameAndMemory (FILE *p_list , PROCES *Obj) {
-        char s1[100];
-        int counter_quotes=0, length_of_line, j, memory_of_process, k=0;
-        time_t t = time(NULL);                                                // или закинуть в функциюю считывания тасклиста в файл
-        tm *currentTime = localtime(&t); // пусть там сразу определяет время и сюда передавать через параметры
-                                                                                                // разница по времени будет не значитела
-         while (!feof(p_list)){
-                        fgets(s1,100,p_list);
-                        length_of_line=strlen(s1);
-                        counter_quotes=0;
-                        char name_of_process[20]="\0";
-                        char mem[10]="\0";
-                        for (int i = 0;i < length_of_line; i++) {
-                                if (s1[i] == '"') {
-                                        counter_quotes++;
-                                        i++;
-                                        if (counter_quotes == 1) {
-                                                j=0;
-                                                while (s1[i]!= '"') {
-                                                        name_of_process[j]=s1[i];
-                                                        j++;
-                                                        i++;
-                                                }
-                                                counter_quotes++;
-                                        }
-
-                                        if (counter_quotes == 9) {
-                                                j=0;
-                                                while (s1[i]!= '"') {
-                                                        if (s1[i] >= '0' && s1[i] <= '9') {
-                                                                mem[j]=s1[i];
-                                                                j++;
-                                                        }
-                                                        i++;
-                                                }
-                                                counter_quotes++;
-                                        }
-                                }
-                        }
-                        memory_of_process = atoi (mem);
-                        Obj[k].memory = memory_of_process;
-                        Obj[k].name = name_of_process;
-                        Obj[k].TimeAndDate = currentTime ; // так будет лучше всего хранить, не надо 2 класса сразу
-                                                                                  // да и много чего другого
-                        k++;
-                }
-                rewind(p_list);
+		}
+		else {
+			sprintf( str,"min: %d sec: %d",min,sec );
+			return str;
+		}
+	}
+	else {
+		sprintf( str,"sec: %d",sec );
+		return str;
+	}
 }
 
 
