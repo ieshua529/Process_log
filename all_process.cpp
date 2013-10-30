@@ -19,8 +19,9 @@ ALL_PROCESS::ALL_PROCESS() {
 		//int num_of_obj = NumberOfLines(p_list);
 		//all_process = new PROCES [ num_of_obj ];
 
-		//@TODO: баг тута..не знаю.. но у меня как не смотрю не вызывается здесь конструктор для эл-та PROCES
-		 all_process.reserve(20);
+		//заранее выделяю память для большего числа процессов..чтобы не было перекопирования вектора,
+		// если вдруг не хватит памяти
+		 all_process.reserve(30);
 
 	}
 }
@@ -33,8 +34,7 @@ ALL_PROCESS::ALL_PROCESS(int size){
 	}
 }
 
-//@TODO: сюда надо передать по ссылке..!!!
-void  GetNameAndMemory (FILE *p_list , vector<PROCES>  &V) {
+void  GetNameAndMemory (FILE *p_list , vector<PROCES> & V) {
 	char s1[100];
 	int counter_quotes=0, length_of_line, j, memory_of_process, k=0, Pid;
 	time_t t = time(NULL);
@@ -96,7 +96,7 @@ void  GetNameAndMemory (FILE *p_list , vector<PROCES>  &V) {
 
 			k++;
 		}
-	//	rewind(p_list);  // а зачем нам это? для возвращения указателя на начало файла
+	rewind(p_list); 
 }
 
 vector<PROCES> Compare (vector<PROCES> &V1, vector<PROCES> &V2){ // v1 главный вектор v2 только считанный
@@ -185,7 +185,6 @@ string Conversation (time_t t_finish, time_t t_begin){
 				sprintf( str,"hours: %d min: %d sec: %d",hours,min,sec );
 				return str;
 			}
-
 		}
 		else {
 			sprintf( str,"min: %d sec: %d",min,sec );
@@ -237,13 +236,15 @@ ALL_PROCESS::~ALL_PROCESS(){
 	fclose(p_list);
 }
 
-//PROCES * ALL_PROCESS::Value_All_Process(){
-//	return all_process;
-//}
 FILE * ALL_PROCESS::Value_P_List(){
 
 	return p_list;
 }
+
+void ALL_PROCESS::Set_Value_P_List(FILE & f){
+	*p_list = f;
+}
+
 
 void WriteChangesToLOG( ALL_PROCESS & main , const  ALL_PROCESS & temp){
 	int size_main = sizeof(main)/sizeof(ALL_PROCESS);
@@ -253,8 +254,7 @@ void WriteChangesToLOG( ALL_PROCESS & main , const  ALL_PROCESS & temp){
 
 }
 
-vector <PROCES>  ALL_PROCESS::GetVectorAllProces(){
-	printf("%d",all_process.size());
+vector <PROCES> & ALL_PROCESS::GetVectorAllProces(){
 	return 	all_process;
 }
 

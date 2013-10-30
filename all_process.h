@@ -7,8 +7,7 @@
 #include <vector>
 #include <stdio.h> // for FILE
 #include <time.h>
-#include <iostream>
-using namespace std;
+
 
 
 // пути до файлов:
@@ -25,7 +24,7 @@ class ALL_PROCESS {
 private:
 
 	vector <PROCES> all_process;
-	FILE *p_list;
+	FILE * p_list;
 
 
 public:
@@ -34,19 +33,19 @@ public:
 	ALL_PROCESS(int);
 	PROCES * Value_All_Process();
 	FILE * Value_P_List();
+	void Set_Value_P_List( FILE & );
 
-	friend void  GetNameAndMemory (FILE *p_list , vector<PROCES>  &V);
-	friend vector<PROCES> Compare (vector<PROCES> &V1, vector<PROCES> &V2);
-	friend string Conversation (time_t t_finish, time_t t_begin);
-	//friend void GetNameAndMemory (FILE *F , PROCES *);// странно но у меня не перегружается фрэнд функции
 
 	~ALL_PROCESS();
 
-	vector <PROCES>  GetVectorAllProces();
+	vector <PROCES> & GetVectorAllProces();
 
 	void operator == (const ALL_PROCESS &);
 
 	friend void WriteChangesToLOG( ALL_PROCESS &,const  ALL_PROCESS &);
+	friend vector <PROCES> Compare ( vector <PROCES> &, vector <PROCES> &2);
+	friend string Conversation (time_t , time_t);
+
 
 };
 

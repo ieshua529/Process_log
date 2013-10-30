@@ -32,7 +32,7 @@ ALL_PROCESS Initialization(const bool is_exist){
 
 	setlocale(0,"");
 
-	// первый раз пооткрываать файлы
+	// @TODO: первый раз пооткрываать файлы
 
 	if(is_exist && FileExists(exist)) {
 		remove(exist); // если включили с параметров '-e' то удаляем файл
@@ -49,7 +49,8 @@ ALL_PROCESS Initialization(const bool is_exist){
 		fclose(f);
 	}
 
-	HideWindow();
+	// отключу для видимости процесса
+	//HideWindow();
 
 	GetProcessList();
 
@@ -59,9 +60,10 @@ ALL_PROCESS Initialization(const bool is_exist){
 //	GetNameAndMemory( main_obj.Value_P_List()  , main_obj.Value_All_Process());
 	GetNameAndMemory( main_obj.Value_P_List()  , main_obj.GetVectorAllProces());
 
-	FILE *f;
+
 	//@TODO: а куда вообще и что мы сохраняем...если это лог, то почему при открытие я пишу в него же>___<
-	if(( f = fopen(_FILE_TO_LOG , "a")) == NULL){
+	main_obj.Set_Value_P_List(*(fopen(_FILE_TO_LOG , "a")));
+	if( !(main_obj.Value_P_List())){
 		WriteToLog("Can't create _FILE_TO_LOG");
 	}else{
 
@@ -81,11 +83,11 @@ ALL_PROCESS Initialization(const bool is_exist){
  */
 
 		//@TODO: оформить в виде отдельной ф-ции
-		fputs("\n###\n" , f);
+		fputs("\n###\n" , main_obj.Value_P_List());
 		vector<PROCES>::iterator i;
 		for(i = main_obj.GetVectorAllProces().begin(); i != main_obj.GetVectorAllProces().end(); i++){
 			//fprintf(f, "+ : ");
-			fprintf(f," + : %s : %d : %d : %s : %s\n" ,
+			fprintf( main_obj.Value_P_List()," + : %s : %d : %d : %s : %s\n" ,
 					main_obj.GetVectorAllProces().back().ShowProcesName(),
 					main_obj.GetVectorAllProces().back().ShowProcesPID(),
 					main_obj.GetVectorAllProces().back().ShowProcesMemory(),
@@ -94,7 +96,7 @@ ALL_PROCESS Initialization(const bool is_exist){
 		}
 		main_obj.GetVectorAllProces().pop_back();
 
-		fclose(f);
+		fclose( main_obj.Value_P_List());
 
 
 	}
