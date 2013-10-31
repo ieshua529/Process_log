@@ -18,7 +18,7 @@ void GetProcessList() {
 
 	if(GET_OS_NAME() == "WINDOWS"){
 
-		system("chcp 1251");
+		system("chcp 1258");
 		system(tasklist);
 
 	} else if(GET_OS_NAME() == "LINUX"){
@@ -57,14 +57,12 @@ ALL_PROCESS Initialization(const bool is_exist){
 	// @TODO: не срабатывает конструктор как надо!!!
 	ALL_PROCESS 	main_obj;
 
-//	GetNameAndMemory( main_obj.Value_P_List()  , main_obj.Value_All_Process());
-	GetNameAndMemory( main_obj.Value_P_List()  , main_obj.GetVectorAllProces());
+	GetNameAndMemory( main_obj.Value_P_List()  , main_obj.GetVectorAllProcess());
 
 
-	//@TODO: а куда вообще и что мы сохраняем...если это лог, то почему при открытие я пишу в него же>___<
 	main_obj.Set_Value_P_List(*(fopen(_FILE_TO_LOG , "a")));
 	if( !(main_obj.Value_P_List())){
-		WriteToLog("Can't create _FILE_TO_LOG");
+		WriteToLog(">>> Can't create _FILE_TO_LOG");
 	}else{
 
 /*
@@ -83,25 +81,22 @@ ALL_PROCESS Initialization(const bool is_exist){
  */
 
 		//@TODO: оформить в виде отдельной ф-ции
-		fputs("\n###\n" , main_obj.Value_P_List());
+		fprintf(main_obj.Value_P_List(), " \n### :: %d : %s : %s",
+				main_obj.GetVectorAllProcess().size() ,
+				main_obj.GetVectorAllProcess()[0].ShowProcesDate() ,
+				main_obj.GetVectorAllProcess()[0].ShowProcesTime());
+
 		vector<PROCES>::iterator i;
-		for(i = main_obj.GetVectorAllProces().begin(); i != main_obj.GetVectorAllProces().end(); i++){
-			//fprintf(f, "+ : ");
-			fprintf( main_obj.Value_P_List()," + : %s : %d : %d : %s : %s\n" ,
-					main_obj.GetVectorAllProces().back().ShowProcesName(),
-					main_obj.GetVectorAllProces().back().ShowProcesPID(),
-					main_obj.GetVectorAllProces().back().ShowProcesMemory(),
-					main_obj.GetVectorAllProces().back().ShowProcesDate(),
-					main_obj.GetVectorAllProces().back().ShowProcesTime() );
+		for(i = main_obj.GetVectorAllProcess().begin(); i != main_obj.GetVectorAllProcess().end() ; i++){
+
+			fprintf( main_obj.Value_P_List(),"\n + : %s : %d : %d",
+					i->ShowProcesName(),
+					i->ShowProcesPID(),
+					i->ShowProcesMemory() );
 		}
-		main_obj.GetVectorAllProces().pop_back();
 
 		fclose( main_obj.Value_P_List());
-
-
 	}
-
-
 
 	return main_obj;
 }
@@ -148,9 +143,9 @@ void CheckProcess(ALL_PROCESS  main_obj){
 
 	ALL_PROCESS  temp;
 
-	GetNameAndMemory(temp.Value_P_List() , temp.GetVectorAllProces());
+	GetNameAndMemory(temp.Value_P_List() , temp.GetVectorAllProcess());
 
-	WriteChangesToLOG( main_obj.GetVectorAllProces() , temp.GetVectorAllProces() );
+	WriteChangesToLOG( main_obj.GetVectorAllProcess() , temp.GetVectorAllProcess() );
 
 
 	temp.~ALL_PROCESS();

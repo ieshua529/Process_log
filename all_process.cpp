@@ -3,26 +3,10 @@
 
 ALL_PROCESS::ALL_PROCESS() {
 
-	// первым делом зафиксируем время
-//	currentTime.SET_TIME( );
-
-	/*
-	all_process = new PROCES;
-	if(!all_process) {
-		WriteToLog("error: Object couldn't be create");
-	}
-	*/
-
 	if ( (p_list = fopen(_FILE_ALL_PROCESS, "r") ) ==  NULL){
 		WriteToLog("error: File process_list couldn't be create");
 	}else {
-		//int num_of_obj = NumberOfLines(p_list);
-		//all_process = new PROCES [ num_of_obj ];
-
-		//заранее выделяю память для большего числа процессов..чтобы не было перекопирования вектора,
-		// если вдруг не хватит памяти
-		 all_process.reserve(30);
-
+		all_process.reserve(50);
 	}
 }
 
@@ -45,7 +29,7 @@ void  GetNameAndMemory (FILE *p_list , vector<PROCES> & V) {
 			fgets(s1,100,p_list);
 			length_of_line=strlen(s1);
 			counter_quotes=0;
-			char name_of_process[20]="\0";
+			char name_of_process[40]="\0";
 			char mem[10]="\0";
 			char pid[10] = "\0";
 			for (int i = 0;i < length_of_line; i++) {
@@ -88,14 +72,15 @@ void  GetNameAndMemory (FILE *p_list , vector<PROCES> & V) {
 			Pid = atoi(pid);
 			Obj.SetProcesMemory(memory_of_process );
 			Obj.SetProcesName ( name_of_process) ;
-			Obj.SetProcesTimeAndDate(currentTime ) ;
+			Obj.SetProcesTimeAndDate( *currentTime ) ;
 			Obj.SetProcesPID ( Pid );
 			Obj.SetTime_t(t);
 			V.push_back(Obj);
 
-
 			k++;
 		}
+	V.pop_back();
+	int y = V[2].TimeAndDate->tm_hour;
 	rewind(p_list); 
 }
 
@@ -152,7 +137,7 @@ void WriteChangesToLOG (vector <PROCES> &V1 , vector <PROCES> &V2){ // v1 гла
 		}
 		if (Count == 0){
 			//cout<<O1.ShowProcesName()<<" просуществовал "<<Conversation(t,O1.ShowTime_t())<<endl;
-			sprintf(txt," - : %s : %d : %d : %s : %s & %s\n", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), O1.ShowProcesTime(), Conversation(t,O1.ShowTime_t()).c_str());
+			sprintf(txt,"\n - : %s : %d : %d : %s : %s & %s\n", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), O1.ShowProcesTime(), Conversation(t,O1.ShowTime_t()).c_str());
 			WriteToLog(txt);
 			for(int i=0; i<100; i++) txt[i]='\0';
 		}
@@ -168,7 +153,7 @@ void WriteChangesToLOG (vector <PROCES> &V1 , vector <PROCES> &V2){ // v1 гла
 			}
 		}
 		if (Count == 0) {
-			sprintf(txt," - : %s : %d : %d : %s : %s & %s\n", O2.ShowProcesName() , O2.ShowProcesPID() , O2.ShowProcesMemory() , O2.ShowProcesDate(), O2.ShowProcesTime(), Conversation(t,O2.ShowTime_t()).c_str());
+			sprintf(txt,"\n + : %s : %d : %d : %s : %s & %s\n", O2.ShowProcesName() , O2.ShowProcesPID() , O2.ShowProcesMemory() , O2.ShowProcesDate(), O2.ShowProcesTime(), Conversation(t,O2.ShowTime_t()).c_str());
 			WriteToLog(txt);
 			V.push_back(O2);
 			for(int i=0; i<100; i++) txt[i]='\0';
@@ -178,34 +163,6 @@ void WriteChangesToLOG (vector <PROCES> &V1 , vector <PROCES> &V2){ // v1 гла
 	V1.clear();
 	copy(V1.begin(),V.begin(),V.end());
 }
-
-
-// как я вызывал весь этот шлак
-//void main( )
-//{
-//	setlocale(0,"");
-//	FILE *F, *F2;
-//	str11 A, A2;
-//	vector<PROCES> B,B2;
-//	int c=0;
-//	while (1){
-//		if (c==0) {
-//			F = fopen("1.txt","r");
-//			GetNameAndMemory (F,B); 
-//			c++;
-//		}
-//		else { 
-//			F2 = fopen("2.txt","r");
-//			GetNameAndMemory (F2,B2); 
-//			B = Compare(B,B2);
-//			Sleep(10000);
-//			fclose(F2);
-//			B2.clear();
-//		}
-//	}
-//	getch();
-//}
-
 
 
 
@@ -219,13 +176,6 @@ int NumberOfLines (FILE *p_list) {       //Считает количество �
 	rewind(p_list);
 	return count;
 }
-
-
-// пока я так понимаю сам ещё не придумал куда вписать?
-//for (vector<str11>::iterator i = B.begin(); i != B.end();i++){
-//		A = *i;
-//		cout<<A.name<<" "<<A.Memory<<" "<<A.TimeAndDate->tm_year<<endl;
-//	}
 
 
 
@@ -254,13 +204,6 @@ void ALL_PROCESS::Set_Value_P_List(FILE & f){
 	*p_list = f;
 }
 
-
-vector <PROCES> & ALL_PROCESS::GetVectorAllProces(){
+vector <PROCES> & ALL_PROCESS::GetVectorAllProcess(){
 	return 	all_process;
 }
-
-
-/*void operator == (const ALL_PROCESS & ALL){
-
-
-}*/

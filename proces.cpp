@@ -14,8 +14,6 @@ PROCES::PROCES(){
 	memory = 0;
 	PID = 0;
 	t = 0;
-	//	TimeAndDate->tm_hour = TimeAndDate->tm_min = TimeAndDate->tm_sec  =
-	//		TimeAndDate->tm_mday  = TimeAndDate->tm_mon = TimeAndDate->tm_year = 0;
 }
 
 void PROCES::SetProcesMemory(int x){
@@ -35,12 +33,16 @@ void PROCES::SetProcesName(string newName){
 }
 
 void PROCES::SetTime_t (time_t t1){
-		t = t1;
+	t = t1;
 }
 
-void PROCES::SetProcesTimeAndDate(tm * temp){
-	*(TimeAndDate) = *(temp);
-	// оказалось нет:/
+void PROCES::SetProcesTimeAndDate(tm & temp){
+	(TimeAndDate->tm_hour) = (temp.tm_hour);
+	(TimeAndDate->tm_mday) = (temp.tm_mday);
+//	*TimeAndDate->tm_min = *temp.tm_min;
+//	*TimeAndDate->tm_mon = *temp.tm_mon;
+//	*TimeAndDate->tm_sec = *temp.tm_sec;
+//	*TimeAndDate->tm_year = *temp.tm_year;
 }
 
 const char * PROCES::ShowProcesName(){
@@ -63,7 +65,7 @@ char * PROCES::ShowProcesTime(){
 
 char * PROCES::ShowProcesDate(){
 	char * temp = new char [11];
-	sprintf(temp,"%d.%d.%d",TimeAndDate->tm_mday,TimeAndDate->tm_mon,TimeAndDate->tm_year);
+	sprintf(temp,"%d.%d.%d",TimeAndDate->tm_mday , TimeAndDate->tm_mon + 1 ,TimeAndDate->tm_year + 1900);
 	return 	temp;
 }
 

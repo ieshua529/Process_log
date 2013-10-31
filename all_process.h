@@ -1,15 +1,4 @@
 
-
-#ifndef ALL_PROCESS_H
-#define ALL_PROCESS_H
-
-#include "proces.h"
-#include <vector>
-#include <stdio.h> // for FILE
-#include <time.h>
-
-
-
 // пути до файлов:
 // 1. без расширения - оно нам и не надо
 // 2. пока работаем в текущей директории
@@ -19,6 +8,16 @@
 #ifndef _FILE_ALL_PROCESS
 #define _FILE_ALL_PROCESS "process_list"
 #endif
+
+
+#ifndef ALL_PROCESS_H
+#define ALL_PROCESS_H
+
+#include "proces.h"
+#include <vector>
+#include <stdio.h> // for FILE
+#include <time.h>
+
 
 class ALL_PROCESS {
 private:
@@ -38,7 +37,7 @@ public:
 
 	~ALL_PROCESS();
 
-	vector <PROCES> & GetVectorAllProces();
+	vector <PROCES> & GetVectorAllProcess();
 
 	void operator == (const ALL_PROCESS &);
 
