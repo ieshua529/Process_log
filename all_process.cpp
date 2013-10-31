@@ -99,71 +99,6 @@ void  GetNameAndMemory (FILE *p_list , vector<PROCES> & V) {
 	rewind(p_list); 
 }
 
-vector<PROCES> Compare (vector<PROCES> &V1, vector<PROCES> &V2){ // v1 главный вектор v2 только считанный
-	PROCES O1 , O2;
-	int Count = 0;
-	vector<PROCES>::iterator i,j;
-	vector<PROCES> V;
-	time_t t = time(NULL);
-	for (i = V1.begin(); i != V1.end(); i++) {
-		for (j = V2.begin(); j != V2.end(); j++){
-			O1 = *i;
-			O2 = *j;
-			if (O1.ShowProcesName() == O2.ShowProcesName() && O1.ShowProcesPID() == O2.ShowProcesPID()){
-				V.push_back(O1);
-				Count++;
-			}
-
-		}
-		if (Count == 0)
-			cout<<O1.ShowProcesName()<<" просуществовал "<<Conversation(t,O1.ShowTime_t())<<endl;
-		Count=0;
-	}
-
-	for (i = V2.begin(); i != V2.end(); i++) {
-		for (j = V1.begin(); j != V1.end(); j++){
-			O1 = *i;
-			O2 = *j;
-			if (O1.ShowProcesName() == O2.ShowProcesName() && O1.ShowProcesPID() == O2.ShowProcesPID()){
-				Count++;
-			}
-		}
-		if (Count == 0)
-			V.push_back(O1);
-		Count = 0;
-	}
-
-	return V;
-}
-
-// оставлю эту ф-цию... на всякий вдруг что-то не сработает ... всё равно она перегружена
-
-// как я вызывал весь этот шлак
-//void main( )
-//{
-//	setlocale(0,"");
-//	FILE *F, *F2;
-//	str11 A, A2;
-//	vector<PROCES> B,B2;
-//	int c=0;
-//	while (1){
-//		if (c==0) {
-//			F = fopen("1.txt","r");
-//			GetNameAndMemory (F,B); 
-//			c++;
-//		}
-//		else { 
-//			F2 = fopen("2.txt","r");
-//			GetNameAndMemory (F2,B2); 
-//			B = Compare(B,B2);
-//			Sleep(10000);
-//			fclose(F2);
-//			B2.clear();
-//		}
-//	}
-//	getch();
-//}
-
 string Conversation (time_t t_finish, time_t t_begin){
 	int T = difftime(t_finish,t_begin);
 	int sec, min, days, hours;
@@ -196,6 +131,82 @@ string Conversation (time_t t_finish, time_t t_begin){
 		return str;
 	}
 }
+
+//			[operation] : [name] : [PID] : [memory] : [date] : [time] & [workTime]
+void WriteChangesToLOG (vector <PROCES> &V1 , vector <PROCES> &V2){ // v1 главный вектор v2 только считанный
+	PROCES O1 , O2;
+	int Count = 0;
+	char txt[100];
+	vector<PROCES>::iterator i,j;
+	vector<PROCES> V;
+	time_t t = time(NULL);
+	for (i = V1.begin(); i != V1.end(); i++) {
+		for (j = V2.begin(); j != V2.end(); j++){
+			O1 = *i;
+			O2 = *j;
+			if (O1.ShowProcesName() == O2.ShowProcesName() && O1.ShowProcesPID() == O2.ShowProcesPID()){
+				V.push_back(O1);
+				Count++;
+			}
+
+		}
+		if (Count == 0){
+			//cout<<O1.ShowProcesName()<<" просуществовал "<<Conversation(t,O1.ShowTime_t())<<endl;
+			sprintf(txt," - : %s : %d : %d : %s : %s & %s\n", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), O1.ShowProcesTime(), Conversation(t,O1.ShowTime_t()).c_str());
+			WriteToLog(txt);
+			for(int i=0; i<100; i++) txt[i]='\0';
+		}
+		Count=0;
+	}
+
+	for (i = V2.begin(); i != V2.end(); i++) {
+		for (j = V1.begin(); j != V1.end(); j++){
+			O1 = *i;
+			O2 = *j;
+			if (O1.ShowProcesName() == O2.ShowProcesName() && O1.ShowProcesPID() == O2.ShowProcesPID()){
+				Count++;
+			}
+		}
+		if (Count == 0) {
+			sprintf(txt," - : %s : %d : %d : %s : %s & %s\n", O2.ShowProcesName() , O2.ShowProcesPID() , O2.ShowProcesMemory() , O2.ShowProcesDate(), O2.ShowProcesTime(), Conversation(t,O2.ShowTime_t()).c_str());
+			WriteToLog(txt);
+			V.push_back(O2);
+			for(int i=0; i<100; i++) txt[i]='\0';
+		}
+		Count = 0;
+	}
+	V1.clear();
+	copy(V1.begin(),V.begin(),V.end());
+}
+
+
+// как я вызывал весь этот шлак
+//void main( )
+//{
+//	setlocale(0,"");
+//	FILE *F, *F2;
+//	str11 A, A2;
+//	vector<PROCES> B,B2;
+//	int c=0;
+//	while (1){
+//		if (c==0) {
+//			F = fopen("1.txt","r");
+//			GetNameAndMemory (F,B); 
+//			c++;
+//		}
+//		else { 
+//			F2 = fopen("2.txt","r");
+//			GetNameAndMemory (F2,B2); 
+//			B = Compare(B,B2);
+//			Sleep(10000);
+//			fclose(F2);
+//			B2.clear();
+//		}
+//	}
+//	getch();
+//}
+
+
 
 
 int NumberOfLines (FILE *p_list) {       //Считает количество строк в файле
@@ -231,13 +242,11 @@ void WriteToLog(const char * to_log) {
 }
 
 ALL_PROCESS::~ALL_PROCESS(){
-	//delete [] all_process;
 	all_process.clear();
 	fclose(p_list);
 }
 
 FILE * ALL_PROCESS::Value_P_List(){
-
 	return p_list;
 }
 
@@ -245,14 +254,6 @@ void ALL_PROCESS::Set_Value_P_List(FILE & f){
 	*p_list = f;
 }
 
-
-void WriteChangesToLOG( ALL_PROCESS & main , const  ALL_PROCESS & temp){
-	int size_main = sizeof(main)/sizeof(ALL_PROCESS);
-	int size_temp = sizeof(temp)/sizeof(ALL_PROCESS);
-
-// @TODO: сравнить 2 вектора и записать в файл изменения
-
-}
 
 vector <PROCES> & ALL_PROCESS::GetVectorAllProces(){
 	return 	all_process;

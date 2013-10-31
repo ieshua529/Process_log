@@ -150,7 +150,7 @@ void CheckProcess(ALL_PROCESS  main_obj){
 
 	GetNameAndMemory(temp.Value_P_List() , temp.GetVectorAllProces());
 
-	WriteChangesToLOG( main_obj , temp );
+	WriteChangesToLOG( main_obj.GetVectorAllProces() , temp.GetVectorAllProces() );
 
 
 	temp.~ALL_PROCESS();
