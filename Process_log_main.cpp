@@ -21,40 +21,27 @@ void GetProcessList() {
 		system("chcp 1258");
 		system(tasklist);
 
+<<<<<<< HEAD
 	//} else if(GET_OS_NAME() == "LINUX"){
 		// ...
 	//}
+=======
+	} else if(GET_OS_NAME() == "LINUX"){
+		// @TODO: написать аналогичную ф-цию для ps -A ....
+	}
+>>>>>>> 763d696d67cd097e1b774ce3fa8806f34ff57d96
 
 }
 
 
-ALL_PROCESS Initialization(const bool is_exist){
+ALL_PROCESS Initialization(){
 
 	setlocale(0,"");
 
-	// @TODO: первый раз пооткрываать файлы
-
-	if(is_exist && FileExists(exist)) {
-		remove(exist); // если включили с параметров '-e' то удаляем файл
-	}
-
-	// по теории если файл запускается без параметра или уже существует то выход
-	if (FileExists(exist) || !is_exist){
-		exit(0);
-	}else{
-		FILE *f;
-		if ((f = fopen(exist, "w")) == NULL){
-			exit(0);
-		}
-		fclose(f);
-	}
-
-	// отключу для видимости процесса
-	//HideWindow();
+	HideWindow();
 
 	GetProcessList();
 
-	// @TODO: не срабатывает конструктор как надо!!!
 	ALL_PROCESS 	main_obj;
 
 	GetNameAndMemory( main_obj.Value_P_List()  , main_obj.GetVectorAllProcess());
@@ -159,28 +146,26 @@ void CheckProcess(ALL_PROCESS & main_obj){
 
 int main(int argc, char *argv[]) {
 
+<<<<<<< HEAD
 	// @TODO: добавить большей свободы в передаче параметров в main()
 
 	int time = 10*1000; // 3sec
 	//time = atoi(argv[1]);
+=======
+	// @TODO: сделать проверку на наличие такого же процесса через мьютексы
+>>>>>>> 763d696d67cd097e1b774ce3fa8806f34ff57d96
 
 
-	// в автозагрузку будет передаваться параметр '-e' -> следовательно файл включился первый раз при загрузке ОС
-	//bool is_exist = (strcmp(argv[2], "-e")) ? true : false;
-	bool is_exist = true;
-
-	ALL_PROCESS main_obj = Initialization(is_exist);
+	ALL_PROCESS main_obj = Initialization();
 
 	while(1){
 
-
-		Timer(time);
+		Timer(3000); // 3sec
 		CheckProcess(main_obj);
 
 		// ...
 	}
 
-	remove(exist); // хз сработает ли когда выключение компьютера
 	return 0;
 }
 
