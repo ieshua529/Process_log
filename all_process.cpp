@@ -116,51 +116,103 @@ string Conversation (time_t t_finish, time_t t_begin){
 }
 
 //	[operation] : [name] : [PID] : [memory] : [date] : [time] & [workTime]
-void WriteChangesToLOG (vector <PROCES> &V1 , vector <PROCES> &V2){ // v1 главный вектор v2 только считанный
+//vector <PROCES> WriteChangesToLOG (vector <PROCES> &V1 , vector <PROCES> &V2){ // v1 главный вектор v2 только считанный
+//	PROCES O1 , O2;
+//	int Count = 0;
+//	char txt[100];
+//	vector<PROCES>::iterator i,j;
+//	vector<PROCES> V;
+//	string temp1,temp2;
+//	time_t t = time(NULL);
+//	// копируем в V объекты V1 == V2
+//	for (i = V1.begin(); i != V1.end(); i++) {
+//		O1 = *i;
+//		temp1 = O1.ShowProcesName();
+//		for (j = V2.begin(); j != V2.end(); j++){
+//			O2 = *j;
+//			temp2 = O2.ShowProcesName();
+//			if ( temp1 == temp2 && O1.ShowProcesPID() == O2.ShowProcesPID()){
+//				V.push_back(O1);
+//				Count++;
+//				break;
+//			}
+//		}
+//		// если не найдено совпадение, тоесть процесс умер
+//		if (Count == 0){
+//			sprintf(txt,"\n - : %s : %d : %d : %s : %s & %s", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), O1.ShowProcesTime(), Conversation(t,O1.ShowTime_t()).c_str());
+//			WriteToLog(txt);
+//			//V1.erase(i);
+//			for(int i=0; i<100; i++) txt[i]='\0';
+//		}
+//		Count = 0;
+//	}
+//
+//	// если новый процесс появился
+//	for (i = V2.begin(); i != V2.end(); i++) {
+//		O1 = *i;
+//		temp1 = O1.ShowProcesName();
+//		for (j = V1.begin(); j != V1.end(); j++){
+//			O2 = *j;
+//			temp2 = O2.ShowProcesName();
+//			// если одинаковые процессы - то ничего не делаем
+//			if ( temp1 == temp2 && O1.ShowProcesPID() == O2.ShowProcesPID()){
+//				Count++;
+//				break;
+//			}
+//		}
+//		if (Count == 0) {
+//			sprintf(txt,"\n + : %s : %d : %d : %s : %s &\n", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), O1.ShowProcesTime());
+//			WriteToLog(txt);
+//			V.push_back(O1);
+//			for(int i=0; i<100; i++) txt[i]='\0';
+//		}
+//		Count = 0;
+//	}
+//	return V;
+//	// @TODO: не пашет :/
+//   // V1.erase(V1.begin(),V1.end());
+//    //swap(V1,V);
+//}
+
+vector<PROCES> WriteChangesToLOG (vector<PROCES> &V1, vector<PROCES> &V2){
 	PROCES O1 , O2;
 	int Count = 0;
-	char txt[100];
+	string temp1, temp2;
+	char txt[100]="\0";
 	vector<PROCES>::iterator i,j;
 	vector<PROCES> V;
-	string temp1,temp2;
 	time_t t = time(NULL);
-	// копируем в V объекты V1 == V2
 	for (i = V1.begin(); i != V1.end(); i++) {
-		O1 = *i;
-		temp1 = O1.ShowProcesName();
 		for (j = V2.begin(); j != V2.end(); j++){
+			O1 = *i;
 			O2 = *j;
+			temp1 = O1.ShowProcesName();
 			temp2 = O2.ShowProcesName();
-			if ( temp1 == temp2 && O1.ShowProcesPID() == O2.ShowProcesPID()){
+			if (temp1 == temp2 && O1.ShowProcesPID() == O2.ShowProcesPID()){
 				V.push_back(O1);
 				Count++;
-				break;
 			}
+
 		}
-		// если не найдено совпадение, тоесть процесс умер
 		if (Count == 0){
 			sprintf(txt,"\n - : %s : %d : %d : %s : %s & %s", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), O1.ShowProcesTime(), Conversation(t,O1.ShowTime_t()).c_str());
 			WriteToLog(txt);
-			V1.erase(i);
 			for(int i=0; i<100; i++) txt[i]='\0';
 		}
-		Count = 0;
+		Count=0;		
 	}
 
-	// если новый процесс появился
 	for (i = V2.begin(); i != V2.end(); i++) {
-		O1 = *i;
-		temp1 = O1.ShowProcesName();
 		for (j = V1.begin(); j != V1.end(); j++){
+			O1 = *i;
 			O2 = *j;
+			temp1 = O1.ShowProcesName();
 			temp2 = O2.ShowProcesName();
-			// если одинаковые процессы - то ничего не делаем
-			if ( temp1 == temp2 && O1.ShowProcesPID() == O2.ShowProcesPID()){
+			if (temp1 == temp2  && O1.ShowProcesPID() == O2.ShowProcesPID()){
 				Count++;
-				break;
 			}
 		}
-		if (Count == 0) {
+		if (Count == 0){
 			sprintf(txt,"\n + : %s : %d : %d : %s : %s &\n", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), O1.ShowProcesTime());
 			WriteToLog(txt);
 			V.push_back(O1);
@@ -168,12 +220,9 @@ void WriteChangesToLOG (vector <PROCES> &V1 , vector <PROCES> &V2){ // v1 гла
 		}
 		Count = 0;
 	}
-	// @TODO: не пашет :/
-    V1.erase(V1.begin(),V1.end());
-    swap(V1,V);
+
+	return V;
 }
-
-
 //Считает количество строк в файле
 int NumberOfLines (FILE *p_list) {
 	int count = 0;
@@ -200,7 +249,7 @@ void WriteToLog(const char * to_log) {
 }
 
 ALL_PROCESS::~ALL_PROCESS(){
-	all_process.clear();
+	// - all_process.clear();
 	fclose(p_list);
 }
 

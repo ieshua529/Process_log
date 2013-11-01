@@ -43,7 +43,7 @@ public :
 	time_t ShowTime_t ();
 
 friend void  GetNameAndMemory (FILE * , vector<PROCES> & );
-friend void WriteChangesToLOG (vector<PROCES> &,vector<PROCES>&);
+friend vector <PROCES> WriteChangesToLOG (vector <PROCES> &V1 , vector <PROCES> &V2);
 friend string Conversation (time_t , time_t);
 
 };

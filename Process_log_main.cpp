@@ -12,18 +12,18 @@
 
 
 #include "Process_log_main.h"
-
+#include "all_process.h"
 
 void GetProcessList() {
 
-	if(GET_OS_NAME() == "WINDOWS"){
+	//if(GET_OS_NAME() == "WINDOWS"){
 
 		system("chcp 1258");
 		system(tasklist);
 
-	} else if(GET_OS_NAME() == "LINUX"){
+	//} else if(GET_OS_NAME() == "LINUX"){
 		// ...
-	}
+	//}
 
 }
 
@@ -102,7 +102,8 @@ ALL_PROCESS Initialization(const bool is_exist){
 }
 
 void Timer(const int time){
-	if(GET_OS_NAME() == "WINDOWS"){
+//	if(GET_OS_NAME() == "WINDOWS"){
+	if(1){
 		Sleep(time);  // winAPI
 	}else{
 		USLEEP(time);
@@ -112,7 +113,8 @@ void Timer(const int time){
 
 void HideWindow(void){
 
-	if(GET_OS_NAME() == "WINDOWS"){
+	//if(GET_OS_NAME() == "WINDOWS"){
+	if(1){
 		HWND hWnd = GetConsoleWindow();
 		ShowWindow(hWnd, SW_HIDE);
 	}else {
@@ -126,7 +128,7 @@ bool FileExists(const char *fname){
 	return access(fname, 0) != -1;
 }
 
-void CheckProcess(ALL_PROCESS  main_obj){
+void CheckProcess(ALL_PROCESS & main_obj){
 	/*
 	 * 0. GetProcessList
 	 * 1. вызываем фрэнд NumberOfLines
@@ -145,9 +147,8 @@ void CheckProcess(ALL_PROCESS  main_obj){
 
 	GetNameAndMemory(temp.Value_P_List() , temp.GetVectorAllProcess());
 
-	WriteChangesToLOG( main_obj.GetVectorAllProcess() , temp.GetVectorAllProcess() );
-
-
+	main_obj.GetVectorAllProcess()=WriteChangesToLOG( main_obj.GetVectorAllProcess() , temp.GetVectorAllProcess() );
+	temp.GetVectorAllProcess().clear();
 	temp.~ALL_PROCESS();
 }
 
@@ -160,7 +161,7 @@ int main(int argc, char *argv[]) {
 
 	// @TODO: добавить большей свободы в передаче параметров в main()
 
-	int time = 3*1000; // 3sec
+	int time = 10*1000; // 3sec
 	//time = atoi(argv[1]);
 
 

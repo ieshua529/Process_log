@@ -18,15 +18,15 @@ using namespace std;
 const char * tasklist = "TASKLIST /FI \"USERNAME NE NT AUTORITY\SYSTEM\" /FI \"STATUS eq running\" /FO CSV /NH > process_list";
 const char * exist = "exist";
 
-string GET_OS_NAME() {
-	#if (defined __linux__)
-		return "LINUX";
-	#else
-	#if (defined __WIN32__)
-		return "WINDOWS";
-	#endif
-	#endif
-}
+//string GET_OS_NAME() {
+//	#if (defined __linux__)
+//		return "LINUX";
+//	#else
+//	#if (defined __WIN32__)
+//		return "WINDOWS";
+//	#endif
+//	#endif
+//}
 
 #if (defined __linux__)
 	#include <unistd.h>
@@ -48,7 +48,7 @@ void HideWindow(void);
 void GetProcessList();
 ALL_PROCESS Initialization(const bool);
 void Timer(const int);
-void CheckProcess(ALL_PROCESS );
+void CheckProcess(ALL_PROCESS & );
 bool FileExists(const char *);
 
 

@@ -41,7 +41,7 @@ public:
 
 	void operator == (const ALL_PROCESS &);
 
-	friend void WriteChangesToLOG (vector<PROCES> &,vector<PROCES>&);
+	friend vector <PROCES> WriteChangesToLOG (vector <PROCES> &V1 , vector <PROCES> &V2);
 	friend string Conversation (time_t , time_t);
 
 
