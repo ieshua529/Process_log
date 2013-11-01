@@ -32,7 +32,7 @@ public :
 	void SetProcesMemory(int);
 	void SetProcesPID(int );
 	void SetProcesName(string );
-	void SetProcesTimeAndDate(tm &);
+	void SetProcesTimeAndDate(tm );
 	void SetTime_t(time_t);
 
 	const char * ShowProcesName();

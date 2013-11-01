@@ -36,13 +36,8 @@ void PROCES::SetTime_t (time_t t1){
 	t = t1;
 }
 
-void PROCES::SetProcesTimeAndDate(tm & temp){
-	(TimeAndDate->tm_hour) = (temp.tm_hour);
-	(TimeAndDate->tm_mday) = (temp.tm_mday);
-//	*TimeAndDate->tm_min = *temp.tm_min;
-//	*TimeAndDate->tm_mon = *temp.tm_mon;
-//	*TimeAndDate->tm_sec = *temp.tm_sec;
-//	*TimeAndDate->tm_year = *temp.tm_year;
+void PROCES::SetProcesTimeAndDate(tm  temp){
+	*TimeAndDate = temp;
 }
 
 const char * PROCES::ShowProcesName(){
@@ -59,18 +54,26 @@ int PROCES::ShowProcesMemory(){
 
 char * PROCES::ShowProcesTime(){
 	char * temp = new char [8];
-	sprintf(temp,"%d/%d/%d",TimeAndDate->tm_hour,TimeAndDate->tm_min,TimeAndDate->tm_sec);
-	return 	temp;
+	if(TimeAndDate->tm_hour < 10) {
+		sprintf(temp,"0%d:%d:%d",TimeAndDate->tm_hour,TimeAndDate->tm_min,TimeAndDate->tm_sec);
+	}else{
+		sprintf(temp,"%d:%d:%d",TimeAndDate->tm_hour,TimeAndDate->tm_min,TimeAndDate->tm_sec);
+	}
+return 	temp;
 }
 
 char * PROCES::ShowProcesDate(){
 	char * temp = new char [11];
-	sprintf(temp,"%d.%d.%d",TimeAndDate->tm_mday , TimeAndDate->tm_mon + 1 ,TimeAndDate->tm_year + 1900);
+	if(TimeAndDate->tm_mday < 10){
+		sprintf(temp,"0%d.%d.%d",TimeAndDate->tm_mday , TimeAndDate->tm_mon + 1 ,TimeAndDate->tm_year + 1900);
+	} else {
+		sprintf(temp,"%d.%d.%d",TimeAndDate->tm_mday , TimeAndDate->tm_mon + 1 ,TimeAndDate->tm_year + 1900);
+	}
 	return 	temp;
 }
 
 PROCES::~PROCES(){
-	delete [] TimeAndDate;
+//	delete [] TimeAndDate;
 }
 
 time_t PROCES::ShowTime_t() {

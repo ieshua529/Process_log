@@ -81,10 +81,10 @@ ALL_PROCESS Initialization(const bool is_exist){
  */
 
 		//@TODO: оформить в виде отдельной ф-ции
-		fprintf(main_obj.Value_P_List(), " \n### :: %d : %s : %s",
+		fprintf(main_obj.Value_P_List(), " \n### :: %d :: %s :: %s",
 				main_obj.GetVectorAllProcess().size() ,
-				main_obj.GetVectorAllProcess()[0].ShowProcesDate() ,
-				main_obj.GetVectorAllProcess()[0].ShowProcesTime());
+				main_obj.GetVectorAllProcess().back().ShowProcesDate() ,
+				main_obj.GetVectorAllProcess().back().ShowProcesTime());
 
 		vector<PROCES>::iterator i;
 		for(i = main_obj.GetVectorAllProcess().begin(); i != main_obj.GetVectorAllProcess().end() ; i++){

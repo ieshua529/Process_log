@@ -4,7 +4,7 @@
 ALL_PROCESS::ALL_PROCESS() {
 
 	if ( (p_list = fopen(_FILE_ALL_PROCESS, "r") ) ==  NULL){
-		WriteToLog("error: File process_list couldn't be create");
+		WriteToLog(">>> error: File process_list couldn't be create");
 	}else {
 		all_process.reserve(50);
 	}
@@ -76,11 +76,9 @@ void  GetNameAndMemory (FILE *p_list , vector<PROCES> & V) {
 			Obj.SetProcesPID ( Pid );
 			Obj.SetTime_t(t);
 			V.push_back(Obj);
-
 			k++;
 		}
 	V.pop_back();
-	int y = V[2].TimeAndDate->tm_hour;
 	rewind(p_list); 
 }
 
@@ -117,56 +115,67 @@ string Conversation (time_t t_finish, time_t t_begin){
 	}
 }
 
-//			[operation] : [name] : [PID] : [memory] : [date] : [time] & [workTime]
+//	[operation] : [name] : [PID] : [memory] : [date] : [time] & [workTime]
 void WriteChangesToLOG (vector <PROCES> &V1 , vector <PROCES> &V2){ // v1 главный вектор v2 только считанный
 	PROCES O1 , O2;
 	int Count = 0;
 	char txt[100];
 	vector<PROCES>::iterator i,j;
 	vector<PROCES> V;
+	string temp1,temp2;
 	time_t t = time(NULL);
+	// копируем в V объекты V1 == V2
 	for (i = V1.begin(); i != V1.end(); i++) {
+		O1 = *i;
+		temp1 = O1.ShowProcesName();
 		for (j = V2.begin(); j != V2.end(); j++){
-			O1 = *i;
 			O2 = *j;
-			if (O1.ShowProcesName() == O2.ShowProcesName() && O1.ShowProcesPID() == O2.ShowProcesPID()){
+			temp2 = O2.ShowProcesName();
+			if ( temp1 == temp2 && O1.ShowProcesPID() == O2.ShowProcesPID()){
 				V.push_back(O1);
 				Count++;
+				break;
 			}
-
 		}
+		// если не найдено совпадение, тоесть процесс умер
 		if (Count == 0){
-			//cout<<O1.ShowProcesName()<<" просуществовал "<<Conversation(t,O1.ShowTime_t())<<endl;
-			sprintf(txt,"\n - : %s : %d : %d : %s : %s & %s\n", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), O1.ShowProcesTime(), Conversation(t,O1.ShowTime_t()).c_str());
+			sprintf(txt,"\n - : %s : %d : %d : %s : %s & %s", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), O1.ShowProcesTime(), Conversation(t,O1.ShowTime_t()).c_str());
 			WriteToLog(txt);
-			for(int i=0; i<100; i++) txt[i]='\0';
-		}
-		Count=0;
-	}
-
-	for (i = V2.begin(); i != V2.end(); i++) {
-		for (j = V1.begin(); j != V1.end(); j++){
-			O1 = *i;
-			O2 = *j;
-			if (O1.ShowProcesName() == O2.ShowProcesName() && O1.ShowProcesPID() == O2.ShowProcesPID()){
-				Count++;
-			}
-		}
-		if (Count == 0) {
-			sprintf(txt,"\n + : %s : %d : %d : %s : %s & %s\n", O2.ShowProcesName() , O2.ShowProcesPID() , O2.ShowProcesMemory() , O2.ShowProcesDate(), O2.ShowProcesTime(), Conversation(t,O2.ShowTime_t()).c_str());
-			WriteToLog(txt);
-			V.push_back(O2);
+			V1.erase(i);
 			for(int i=0; i<100; i++) txt[i]='\0';
 		}
 		Count = 0;
 	}
-	V1.clear();
-	copy(V1.begin(),V.begin(),V.end());
+
+	// если новый процесс появился
+	for (i = V2.begin(); i != V2.end(); i++) {
+		O1 = *i;
+		temp1 = O1.ShowProcesName();
+		for (j = V1.begin(); j != V1.end(); j++){
+			O2 = *j;
+			temp2 = O2.ShowProcesName();
+			// если одинаковые процессы - то ничего не делаем
+			if ( temp1 == temp2 && O1.ShowProcesPID() == O2.ShowProcesPID()){
+				Count++;
+				break;
+			}
+		}
+		if (Count == 0) {
+			sprintf(txt,"\n + : %s : %d : %d : %s : %s &\n", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), O1.ShowProcesTime());
+			WriteToLog(txt);
+			V.push_back(O1);
+			for(int i=0; i<100; i++) txt[i]='\0';
+		}
+		Count = 0;
+	}
+	// @TODO: не пашет :/
+    V1.erase(V1.begin(),V1.end());
+    swap(V1,V);
 }
 
 
-
-int NumberOfLines (FILE *p_list) {       //Считает количество строк в файле
+//Считает количество строк в файле
+int NumberOfLines (FILE *p_list) {
 	int count = 0;
 	char str[100];
 	while (!feof(p_list)) {
@@ -187,7 +196,6 @@ void WriteToLog(const char * to_log) {
 		}else {
 			fputs(to_log, log);
 			fclose(log);
-			exit(2);
 		}
 }
 
