@@ -1,13 +1,4 @@
 
-/*
- *  сюда выносим побочные ф-ции
- *  - определение ОС
- *  - обращение к cmd для получения process_list
- *  - проверка на существование такого же процесса при запуске
- *  -
- *
- */
-
 
 #ifndef PROCESS_LOG_MAIN_H
 #define PROCESS_LOG_MAIN_H
@@ -18,7 +9,7 @@
 #include <iostream>
 #include <io.h>
 #include <time.h>
-#include <unistd.h>
+
 #include <locale.h>
 
 
@@ -36,6 +27,13 @@ string GET_OS_NAME() {
 	#endif
 	#endif
 }
+
+#if (defined __linux__)
+	#include <unistd.h>
+	#define USLEEP usleep
+#else
+	#define USLEEP Sleep
+#endif
 
 #ifndef _FILE_TO_LOG
 #define _FILE_TO_LOG "log"

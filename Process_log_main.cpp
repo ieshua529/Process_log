@@ -94,7 +94,7 @@ ALL_PROCESS Initialization(const bool is_exist){
 					i->ShowProcesPID(),
 					i->ShowProcesMemory() );
 		}
-
+		fputs("\n::",main_obj.Value_P_List());
 		fclose( main_obj.Value_P_List());
 	}
 
@@ -105,7 +105,7 @@ void Timer(const int time){
 	if(GET_OS_NAME() == "WINDOWS"){
 		Sleep(time);  // winAPI
 	}else{
-		usleep(time);
+		USLEEP(time);
 	}
 }
 
