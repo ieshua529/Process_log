@@ -83,7 +83,8 @@ void  GetNameAndMemory (FILE *p_list , vector<PROCES> & V) {
 }
 
 string Conversation (time_t t_finish, time_t t_begin){
-	int T = difftime(t_finish,t_begin);
+//	time_t T = difftime(t_finish,t_begin);
+	time_t T = t_finish - t_begin;
 	int sec, min, days, hours;
 	char str[40];
 	sec = T%60;
@@ -115,64 +116,6 @@ string Conversation (time_t t_finish, time_t t_begin){
 	}
 }
 
-//	[operation] : [name] : [PID] : [memory] : [date] : [time] & [workTime]
-//vector <PROCES> WriteChangesToLOG (vector <PROCES> &V1 , vector <PROCES> &V2){ // v1 главный вектор v2 только считанный
-//	PROCES O1 , O2;
-//	int Count = 0;
-//	char txt[100];
-//	vector<PROCES>::iterator i,j;
-//	vector<PROCES> V;
-//	string temp1,temp2;
-//	time_t t = time(NULL);
-//	// копируем в V объекты V1 == V2
-//	for (i = V1.begin(); i != V1.end(); i++) {
-//		O1 = *i;
-//		temp1 = O1.ShowProcesName();
-//		for (j = V2.begin(); j != V2.end(); j++){
-//			O2 = *j;
-//			temp2 = O2.ShowProcesName();
-//			if ( temp1 == temp2 && O1.ShowProcesPID() == O2.ShowProcesPID()){
-//				V.push_back(O1);
-//				Count++;
-//				break;
-//			}
-//		}
-//		// если не найдено совпадение, тоесть процесс умер
-//		if (Count == 0){
-//			sprintf(txt,"\n - : %s : %d : %d : %s : %s & %s", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), O1.ShowProcesTime(), Conversation(t,O1.ShowTime_t()).c_str());
-//			WriteToLog(txt);
-//			//V1.erase(i);
-//			for(int i=0; i<100; i++) txt[i]='\0';
-//		}
-//		Count = 0;
-//	}
-//
-//	// если новый процесс появился
-//	for (i = V2.begin(); i != V2.end(); i++) {
-//		O1 = *i;
-//		temp1 = O1.ShowProcesName();
-//		for (j = V1.begin(); j != V1.end(); j++){
-//			O2 = *j;
-//			temp2 = O2.ShowProcesName();
-//			// если одинаковые процессы - то ничего не делаем
-//			if ( temp1 == temp2 && O1.ShowProcesPID() == O2.ShowProcesPID()){
-//				Count++;
-//				break;
-//			}
-//		}
-//		if (Count == 0) {
-//			sprintf(txt,"\n + : %s : %d : %d : %s : %s &\n", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), O1.ShowProcesTime());
-//			WriteToLog(txt);
-//			V.push_back(O1);
-//			for(int i=0; i<100; i++) txt[i]='\0';
-//		}
-//		Count = 0;
-//	}
-//	return V;
-//	// @TODO: не пашет :/
-//   // V1.erase(V1.begin(),V1.end());
-//    //swap(V1,V);
-//}
 
 vector<PROCES> WriteChangesToLOG (vector<PROCES> &V1, vector<PROCES> &V2){
 	PROCES O1 , O2;
@@ -182,6 +125,7 @@ vector<PROCES> WriteChangesToLOG (vector<PROCES> &V1, vector<PROCES> &V2){
 	vector<PROCES>::iterator i,j;
 	vector<PROCES> V;
 	time_t t = time(NULL);
+	tm *currentTime = localtime(&t);
 	for (i = V1.begin(); i != V1.end(); i++) {
 		for (j = V2.begin(); j != V2.end(); j++){
 			O1 = *i;
@@ -195,7 +139,16 @@ vector<PROCES> WriteChangesToLOG (vector<PROCES> &V1, vector<PROCES> &V2){
 
 		}
 		if (Count == 0){
-			sprintf(txt,"\n - : %s : %d : %d : %s : %s & %s", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), O1.ShowProcesTime(), Conversation(t,O1.ShowTime_t()).c_str());
+			// а на секунды пофигу
+			if (currentTime->tm_hour >= 10 && currentTime->tm_min >= 10 ){
+				sprintf(txt,"\n - : %s : %d : %d : %s : %d:%d:%d => %s", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), currentTime->tm_hour , currentTime->tm_min , currentTime->tm_sec, Conversation(t,O1.ShowTime_t()).c_str());
+			} else if (currentTime->tm_hour >= 10 && currentTime->tm_min < 10 ){
+				sprintf(txt,"\n - : %s : %d : %d : %s : %d:0%d:%d => %s", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), currentTime->tm_hour , currentTime->tm_min , currentTime->tm_sec, Conversation(t,O1.ShowTime_t()).c_str());
+			} else if (currentTime->tm_hour < 10 && currentTime->tm_min >= 10 ){
+				sprintf(txt,"\n - : %s : %d : %d : %s : 0%d:%d:%d => %s", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), currentTime->tm_hour , currentTime->tm_min , currentTime->tm_sec, Conversation(t,O1.ShowTime_t()).c_str());
+			} else if (currentTime->tm_hour < 10 && currentTime->tm_min < 10 ){
+				sprintf(txt,"\n - : %s : %d : %d : %s : 0%d:0%d:%d => %s", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), currentTime->tm_hour , currentTime->tm_min , currentTime->tm_sec, Conversation(t,O1.ShowTime_t()).c_str());
+			}
 			WriteToLog(txt);
 			for(int i=0; i<100; i++) txt[i]='\0';
 		}
@@ -213,7 +166,7 @@ vector<PROCES> WriteChangesToLOG (vector<PROCES> &V1, vector<PROCES> &V2){
 			}
 		}
 		if (Count == 0){
-			sprintf(txt,"\n + : %s : %d : %d : %s : %s &\n", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), O1.ShowProcesTime());
+			sprintf(txt,"\n + : %s : %d : %d : %s : %s", O1.ShowProcesName() , O1.ShowProcesPID() , O1.ShowProcesMemory() , O1.ShowProcesDate(), O1.ShowProcesTime());
 			WriteToLog(txt);
 			V.push_back(O1);
 			for(int i=0; i<100; i++) txt[i]='\0';
@@ -222,17 +175,6 @@ vector<PROCES> WriteChangesToLOG (vector<PROCES> &V1, vector<PROCES> &V2){
 	}
 
 	return V;
-}
-//Считает количество строк в файле
-int NumberOfLines (FILE *p_list) {
-	int count = 0;
-	char str[100];
-	while (!feof(p_list)) {
-		fgets(str, 100, p_list);
-		count++;
-	}
-	rewind(p_list);
-	return count;
 }
 
 

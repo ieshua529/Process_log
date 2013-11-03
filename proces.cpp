@@ -54,10 +54,14 @@ int PROCES::ShowProcesMemory(){
 
 char * PROCES::ShowProcesTime(){
 	char * temp = new char [8];
-	if(TimeAndDate->tm_hour < 10) {
+	if(TimeAndDate->tm_hour < 10 && TimeAndDate->tm_min >= 10) {
 		sprintf(temp,"0%d:%d:%d",TimeAndDate->tm_hour,TimeAndDate->tm_min,TimeAndDate->tm_sec);
-	}else{
+	}else if (TimeAndDate->tm_hour < 10 && TimeAndDate->tm_min < 10){
+		sprintf(temp,"0%d:0%d:%d",TimeAndDate->tm_hour,TimeAndDate->tm_min,TimeAndDate->tm_sec);
+	}else if (TimeAndDate->tm_hour >= 10 && TimeAndDate->tm_min >= 10){
 		sprintf(temp,"%d:%d:%d",TimeAndDate->tm_hour,TimeAndDate->tm_min,TimeAndDate->tm_sec);
+	}else if (TimeAndDate->tm_hour >= 10 && TimeAndDate->tm_min < 10){
+		sprintf(temp,"%d:0%d:%d",TimeAndDate->tm_hour,TimeAndDate->tm_min,TimeAndDate->tm_sec);
 	}
 return 	temp;
 }

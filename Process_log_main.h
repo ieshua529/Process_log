@@ -25,46 +25,12 @@
 		#endif
 	}
 
-<<<<<<< HEAD
-#include <locale.h>
-
-
-using namespace std;
-
-const char * tasklist = "TASKLIST /FI \"USERNAME NE NT AUTORITY\SYSTEM\" /FI \"STATUS eq running\" /FO CSV /NH > process_list";
-const char * exist = "exist";
-
-//string GET_OS_NAME() {
-//	#if (defined __linux__)
-//		return "LINUX";
-//	#else
-//	#if (defined __WIN32__)
-//		return "WINDOWS";
-//	#endif
-//	#endif
-//}
-
-#if (defined __linux__)
-	#include <unistd.h>
-	#define USLEEP usleep
-#else
-	#define USLEEP Sleep
-#endif
-
-#ifndef _FILE_TO_LOG
-#define _FILE_TO_LOG "log"
-#endif
-#ifndef _FILE_ALL_PROCESS
-#define _FILE_ALL_PROCESS "process_list"
-#endif
-=======
 	#if (defined __linux__)
 		#include <unistd.h>
 		#define USLEEP usleep
 	#else
 		#define USLEEP Sleep
 	#endif
->>>>>>> 763d696d67cd097e1b774ce3fa8806f34ff57d96
 
 	#ifndef _FILE_TO_LOG
 		#define _FILE_TO_LOG "log"
@@ -73,22 +39,21 @@ const char * exist = "exist";
 		#define _FILE_ALL_PROCESS "process_list"
 	#endif
 
+	#if (defined __linux__)
+		#include <unistd.h>
+		#define USLEEP usleep
+	#else
+		#define USLEEP Sleep
+	#endif
 
-<<<<<<< HEAD
-void HideWindow(void);
-void GetProcessList();
-ALL_PROCESS Initialization(const bool);
-void Timer(const int);
-void CheckProcess(ALL_PROCESS & );
-bool FileExists(const char *);
-=======
+
 	void HideWindow(void);
 	void GetProcessList();
 	ALL_PROCESS Initialization();
 	void Timer(const int);
-	void CheckProcess(ALL_PROCESS );
+	void CheckProcess(ALL_PROCESS &);
 	bool FileExists(const char *);
->>>>>>> 763d696d67cd097e1b774ce3fa8806f34ff57d96
+
 
 
 #endif

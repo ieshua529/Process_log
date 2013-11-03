@@ -16,21 +16,14 @@
 
 void GetProcessList() {
 
-	//if(GET_OS_NAME() == "WINDOWS"){
+	if(GET_OS_NAME() == "WINDOWS"){
 
 		system("chcp 1258");
 		system(tasklist);
 
-<<<<<<< HEAD
-	//} else if(GET_OS_NAME() == "LINUX"){
-		// ...
-	//}
-=======
 	} else if(GET_OS_NAME() == "LINUX"){
 		// @TODO: написать аналогичную ф-цию для ps -A ....
 	}
->>>>>>> 763d696d67cd097e1b774ce3fa8806f34ff57d96
-
 }
 
 
@@ -68,7 +61,7 @@ ALL_PROCESS Initialization(){
  */
 
 		//@TODO: оформить в виде отдельной ф-ции
-		fprintf(main_obj.Value_P_List(), " \n### :: %d :: %s :: %s",
+		fprintf(main_obj.Value_P_List(), " \n### :: %d process :: %s :: %s :: ###",
 				main_obj.GetVectorAllProcess().size() ,
 				main_obj.GetVectorAllProcess().back().ShowProcesDate() ,
 				main_obj.GetVectorAllProcess().back().ShowProcesTime());
@@ -89,8 +82,8 @@ ALL_PROCESS Initialization(){
 }
 
 void Timer(const int time){
-//	if(GET_OS_NAME() == "WINDOWS"){
-	if(1){
+	if(GET_OS_NAME() == "WINDOWS"){
+//	if(1){
 		Sleep(time);  // winAPI
 	}else{
 		USLEEP(time);
@@ -146,21 +139,13 @@ void CheckProcess(ALL_PROCESS & main_obj){
 
 int main(int argc, char *argv[]) {
 
-<<<<<<< HEAD
-	// @TODO: добавить большей свободы в передаче параметров в main()
-
-	int time = 10*1000; // 3sec
-	//time = atoi(argv[1]);
-=======
 	// @TODO: сделать проверку на наличие такого же процесса через мьютексы
->>>>>>> 763d696d67cd097e1b774ce3fa8806f34ff57d96
-
 
 	ALL_PROCESS main_obj = Initialization();
 
 	while(1){
 
-		Timer(3000); // 3sec
+		Timer(10*1000); // 10 sec pause
 		CheckProcess(main_obj);
 
 		// ...
